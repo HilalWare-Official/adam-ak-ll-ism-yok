@@ -1,0 +1,87 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+local TextChatService = game:GetService("TextChatService")
+
+local mesaj1 = "-net"
+local mesaj2 = "By HilalWare.Lua"
+
+
+TextChatService.TextChannels.RBXGeneral:SendAsync(mesaj1)
+wait(0.5) -- biraz bekle ki arada fark olsun yarram
+TextChatService.TextChannels.RBXGeneral:SendAsync(mesaj2)
+
+
+
+
+local ALAN_YARICAP = 40
+local HIZ = 9999 -- ÇOK hızlı
+local BEKLEME = 0.0001 -- hedef değiştirme süresi
+
+-- Rastgele hedef pozisyon
+local function randomOffset()
+    return Vector3.new(
+        math.random(-ALAN_YARICAP, ALAN_YARICAP),
+        math.random(-ALAN_YARICAP, ALAN_YARICAP),
+        math.random(-ALAN_YARICAP, ALAN_YARICAP)
+    )
+end
+
+-- Rastgele rotation
+local function randomRotation()
+    return CFrame.Angles(
+        math.rad(math.random(0, 360)),
+        math.rad(math.random(0, 360)),
+        math.rad(math.random(0, 360))
+    )
+end
+
+local function temizleVeTakip()
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hrp = char:WaitForChild("HumanoidRootPart")
+
+    for _, accessory in ipairs(char:GetChildren()) do
+        if accessory:IsA("Accessory") then
+            local handle = accessory:FindFirstChild("Handle")
+            if handle and handle:IsA("BasePart") then
+                -- SpecialMesh sil
+                local mesh = handle:FindFirstChildOfClass("SpecialMesh")
+                if mesh then
+                    mesh:Destroy()
+                end
+
+                -- AccessoryWeld sil
+                local weld = handle:FindFirstChild("AccessoryWeld") or accessory:FindFirstChild("AccessoryWeld")
+                if weld then
+                    weld:Destroy()
+                end
+
+                handle.Anchored = false
+                handle.CanCollide = false
+
+                local hedefPozisyon = hrp.Position + randomOffset()
+                local sonDegisiklik = tick()
+
+                RunService.Heartbeat:Connect(function()
+                    if handle and handle.Parent and hrp and hrp.Parent then
+                        -- Çok hızlı hedef değiştirme
+                        if tick() - sonDegisiklik >= BEKLEME then
+                            hedefPozisyon = hrp.Position + randomOffset()
+                            sonDegisiklik = tick()
+                        end
+
+                        -- Velocity ile hedefe doğru hareket
+                        local yon = (hedefPozisyon - handle.Position).Unit
+                        handle.Velocity = yon * HIZ
+
+                        -- Rastgele rotation ekle
+                        handle.CFrame = handle.CFrame * randomRotation()
+                    end
+                end)
+            end
+        end
+    end
+end
+
+player.CharacterAdded:Connect(temizleVeTakip)
+temizleVeTakip()
