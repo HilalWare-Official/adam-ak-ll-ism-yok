@@ -32,7 +32,7 @@ local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
 local TextChatService = game:GetService("TextChatService")
 
-local message = "New Scripts By HilalWare.Lua"
+local message = "By HilalWare.Lua"
 
 local channel = TextChatService:FindFirstChild("TextChannels") and TextChatService.TextChannels:FindFirstChild("RBXGeneral")
 if channel then
