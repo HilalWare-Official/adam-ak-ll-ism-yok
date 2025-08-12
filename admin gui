@@ -1,9 +1,11 @@
---admin script
+--admin script V2
+
+
 local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
 local TextChatService = game:GetService("TextChatService")
 
-local message = "By @HilalWare.lua, @Muhammet_bekir2003, @muhammet_bekir2004, @q692q"
+local message = "New Scripts By HilalWare.Lua"
 
 local channel = TextChatService:FindFirstChild("TextChannels") and TextChatService.TextChannels:FindFirstChild("RBXGeneral")
 if channel then
@@ -124,10 +126,15 @@ local function setupCommands(player)
         elseif message == "/loopbring" then
             loopBring = true
             loopTarget = player
+        end 
 
         elseif message == "/unloopbring" then
             loopBring = false
             loopTarget = nil
+        end
+
+        elseif message == "/fly" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly"))()
         end
     end)
 end
