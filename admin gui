@@ -1,14 +1,14 @@
---[[
+--[[ akllı vip admin sistem
 
 ....................................................................................................................
 /$$   /$$ /$$ /$$           /$$       /$$      /$$                                   /$$                          
-| $$  | $$|__/| $$          | $$      | $$  /$ | $$                                  | $$                          
+| $$  | $$|/| $$          | $$      | $$  /$ | $$                                  | $$                          
 | $$  | $$ /$$| $$  /$$$$$$ | $$      | $$ /$$$| $$  /$$$$$$   /$$$$$$   /$$$$$$     | $$       /$$   /$$  /$$$$$$ 
 | $$$$$$$$| $$| $$ |____  $$| $$      | $$/$$ $$ $$ |____  $$ /$$__  $$ /$$__  $$    | $$      | $$  | $$ |____  $$
-| $$__  $$| $$| $$  /$$$$$$$| $$      | $$$$_  $$$$  /$$$$$$$| $$  \__/| $$$$$$$$    | $$      | $$  | $$  /$$$$$$$
-| $$  | $$| $$| $$ /$$__  $$| $$      | $$$/ \  $$$ /$$__  $$| $$      | $$_____/    | $$      | $$  | $$ /$$__  $$
+| $$__  $$| $$| $$  /$$$$$$$| $$      | $$$$_  $$$$  /$$$$$$$| $$  \/| $$$$$$$$    | $$      | $$  | $$  /$$$$$$$
+| $$  | $$| $$| $$ /$$__  $$| $$      | $$$/ \  $$$ /$$__  $$| $$      | $$/    | $$      | $$  | $$ /$$_  $$
 | $$  | $$| $$| $$|  $$$$$$$| $$      | $$/   \  $$|  $$$$$$$| $$      |  $$$$$$$ /$$| $$$$$$$$|  $$$$$$/|  $$$$$$$
-|__/  |__/|__/|__/ \_______/|__/      |__/     \__/ \_______/|__/       \_______/|__/|________/ \______/  \_______/
+|/  |/|/|/ \/|/      |/     \/ \/|/       \/|/|/ \/  \/
 .....................................................................................................................
 
 
@@ -207,23 +207,6 @@ for _, player in ipairs(Players:GetPlayers()) do
     if allowedUsers[player.Name] then
         addAdminTag(player)
         setupCommands(player)
-    end
-end
-
--- Chat mesajlarını filtrele (Hilalci yazan adminler "Ben" olarak görünür)
-if TextChatService:FindFirstChild("TextChannels") then
-    local channel = TextChatService.TextChannels:FindFirstChild("RBXGeneral")
-    if channel then
-        channel.OnIncomingMessage = function(message)
-            local senderName = message.TextSource and message.TextSource.Name
-            local sender = senderName and Players:FindFirstChild(senderName)
-            if sender and allowedUsers[sender.Name] then
-                if string.find(string.lower(message.Text), "hilalci") then
-                    message.Text = "Ben"
-                end
-            end
-            return message
-        end
     end
 end
 
