@@ -1,4 +1,31 @@
---admin script V2
+--[[
+
+....................................................................................................................
+/$$   /$$ /$$ /$$           /$$       /$$      /$$                                   /$$                          
+| $$  | $$|__/| $$          | $$      | $$  /$ | $$                                  | $$                          
+| $$  | $$ /$$| $$  /$$$$$$ | $$      | $$ /$$$| $$  /$$$$$$   /$$$$$$   /$$$$$$     | $$       /$$   /$$  /$$$$$$ 
+| $$$$$$$$| $$| $$ |____  $$| $$      | $$/$$ $$ $$ |____  $$ /$$__  $$ /$$__  $$    | $$      | $$  | $$ |____  $$
+| $$__  $$| $$| $$  /$$$$$$$| $$      | $$$$_  $$$$  /$$$$$$$| $$  \__/| $$$$$$$$    | $$      | $$  | $$  /$$$$$$$
+| $$  | $$| $$| $$ /$$__  $$| $$      | $$$/ \  $$$ /$$__  $$| $$      | $$_____/    | $$      | $$  | $$ /$$__  $$
+| $$  | $$| $$| $$|  $$$$$$$| $$      | $$/   \  $$|  $$$$$$$| $$      |  $$$$$$$ /$$| $$$$$$$$|  $$$$$$/|  $$$$$$$
+|__/  |__/|__/|__/ \_______/|__/      |__/     \__/ \_______/|__/       \_______/|__/|________/ \______/  \_______/
+.....................................................................................................................
+
+
+
+Bu scipt Tamamen Şifrelenmiş Ve 16.07.2021 tarihinde yapılıp 16.07.2025 tarihinde yayınlanmıştır.
+Kod Tamamen Şifrelenmiştir. Lüffen Kodu Değiştirmeyin.
+Kod değiştirilirse Sorumluluk kabul edilmez.
+Yani kusura bakmayın ayrıca kodda bypass olmasına rağmen kod yüzünden ban yemeniz benim suçum değil amk.
+Bu kodu zamandan tasarruf etmek için yazdım.
+OE lik yapmayın.
+Sitemiz: HilalWare.netlify.com
+Tiktok: OyuncuYesOfficial
+Sizi sitemize ve Tiktok a bekleriz.
+İyi günler dileriz.
+Ve kullandığınız için teşekkür ederiz.
+
+]] 
 
 
 local Players = game:GetService("Players")
@@ -126,12 +153,12 @@ local function setupCommands(player)
         elseif message == "/loopbring" then
             loopBring = true
             loopTarget = player
-        end 
+        
 
         elseif message == "/unloopbring" then
             loopBring = false
             loopTarget = nil
-        end
+        
 
         elseif message == "/fly" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly"))()
