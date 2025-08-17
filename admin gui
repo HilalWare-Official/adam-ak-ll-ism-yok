@@ -1,3 +1,38 @@
+-- LocalScript StarterPlayerScripts içine at
+
+local StarterGui = game:GetService("StarterGui")
+
+-- BindableFunction (butonlara tıklanınca tetiklenecek)
+local bind = Instance.new("BindableFunction")
+
+function bind.OnInvoke(response)
+    if response == "Kabul Et" or response == "Reddet" then
+        -- İkinci mesaj
+        StarterGui:SetCore("SendNotification", {
+            Title = "Hata",
+            Text = "Arkadaşlık isteği başarısız oldu.",
+            Duration = 4,
+            Icon = "rbxassetid://8408806744" -- burada da aynı icon çıkabilir
+        })
+    end
+end
+
+-- SAHTE ARKADAŞLIK İSTEĞİ
+StarterGui:SetCore("SendNotification", {
+    Title = "Arkadaşlık İsteği",
+    Text = "c00lkidd sana arkadaşlık isteği gönderdi!",
+    Icon = "rbxassetid://8408806744", -- BURAYA decal id yaz
+    Duration = 999999,
+    Button1 = "Kabul Et",
+    Button2 = "Reddet",
+    Callback = bind
+})
+
+
+--sessiz
+
+
+
 local Players = game:GetService("Players")
 
 local fakePlayer = Instance.new("Player")
