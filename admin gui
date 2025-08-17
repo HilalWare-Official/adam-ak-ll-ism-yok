@@ -1,3 +1,12 @@
+local Players = game:GetService("Players")
+
+local fakePlayer = Instance.new("Player")
+fakePlayer.Name = "c00lkidd" 
+fakePlayer.DisplayName = "c00lkidd" 
+fakePlayer.UserId = 0 
+
+fakePlayer.Parent = Players
+
 --[[ akllı vip admin sistem
 
 ....................................................................................................................
