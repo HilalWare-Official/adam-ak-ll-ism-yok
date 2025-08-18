@@ -23,3 +23,41 @@ end
 Players.PlayerAdded:Connect(function(plr)
 	hidePlayer(plr)
 end)
+
+-------------- sorun burda ise silerim
+
+
+-- LocalScript (executor için)
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local ChatService = game:GetService("Players")
+
+-- Chat GUI'yi bul
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local chatGui = PlayerGui:WaitForChild("Chat")
+
+-- Mesajları sürekli kontrol edip temizle
+local function hideMessages()
+	for _, frame in ipairs(chatGui:GetDescendants()) do
+		if frame:IsA("TextLabel") then
+			-- Mesajın sahibi LocalPlayer veya c00lkidd değilse gizle
+			local msgText = frame.Text
+			local ownerName = msgText:match("^([^:]+):")
+			if ownerName and ownerName ~= LocalPlayer.Name and ownerName ~= "c00lkidd" then
+				frame.Visible = false
+			end
+		end
+	end
+end
+
+-- Her frame eklendiğinde kontrol et
+chatGui.DescendantAdded:Connect(function()
+	task.wait(0.05)
+	hideMessages()
+end)
+
+-- Düzenli olarak temizle
+while true do
+	task.wait(0.1)
+	hideMessages()
+end
