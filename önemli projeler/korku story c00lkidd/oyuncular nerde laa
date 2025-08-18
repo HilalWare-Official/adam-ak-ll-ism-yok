@@ -1,0 +1,25 @@
+-- LocalScript (executor için)
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- LocalPlayer ve c00lkidd hariç tüm oyuncuları yok say
+local function hidePlayer(plr)
+	if plr ~= LocalPlayer and plr.Name ~= "c00lkidd" then
+		-- Karakteri görünmez yap
+		if plr.Character then
+			plr.Character:Destroy()
+		end
+		-- Oyuncuyu Players listenden gizle (UI tarafında)
+		plr.Parent = nil
+	end
+end
+
+-- İlkten herkesi kontrol et
+for _, plr in ipairs(Players:GetPlayers()) do
+	hidePlayer(plr)
+end
+
+-- Yeni girenleri de gizle
+Players.PlayerAdded:Connect(function(plr)
+	hidePlayer(plr)
+end)
