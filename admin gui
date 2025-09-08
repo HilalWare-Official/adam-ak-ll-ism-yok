@@ -1,71 +1,3 @@
---systemm 2
-
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
--- Blacklist tablosu
-local blacklistedPlayers = {
-    "Anar1234558",
-    "makan0000",
-    "sisiysieosisusjs",
-    "ReVeD961",
-    "sad53119",
-    "Bob207362",
-    "kakos_8881",
-    "NOBUU8625",
-    "bool_anget",
-    "Kayrabjk010203"
-    "AervanixVX"
-}
-
--- Eğer oyuncu blacklist'te ise kick
-if table.find(blacklistedPlayers, LocalPlayer.Name) then
-    LocalPlayer:Kick("fuck you bitch you BLACKLISTED")
-end
-
-
-
---sessiz
-
-local Players = game:GetService("Players")
-
-local fakePlayer = Instance.new("Player")
-fakePlayer.Name = "c00lkidd" 
-fakePlayer.DisplayName = "c00lkidd" 
-fakePlayer.UserId = 0 
-
-fakePlayer.Parent = Players
-
---[[ akllı vip admin sistem
-
-....................................................................................................................
-/$$   /$$ /$$ /$$           /$$       /$$      /$$                                   /$$                          
-| $$  | $$|/| $$          | $$      | $$  /$ | $$                                  | $$                          
-| $$  | $$ /$$| $$  /$$$$$$ | $$      | $$ /$$$| $$  /$$$$$$   /$$$$$$   /$$$$$$     | $$       /$$   /$$  /$$$$$$ 
-| $$$$$$$$| $$| $$ |____  $$| $$      | $$/$$ $$ $$ |____  $$ /$$__  $$ /$$__  $$    | $$      | $$  | $$ |____  $$
-| $$__  $$| $$| $$  /$$$$$$$| $$      | $$$$_  $$$$  /$$$$$$$| $$  \/| $$$$$$$$    | $$      | $$  | $$  /$$$$$$$
-| $$  | $$| $$| $$ /$$__  $$| $$      | $$$/ \  $$$ /$$__  $$| $$      | $$/    | $$      | $$  | $$ /$$_  $$
-| $$  | $$| $$| $$|  $$$$$$$| $$      | $$/   \  $$|  $$$$$$$| $$      |  $$$$$$$ /$$| $$$$$$$$|  $$$$$$/|  $$$$$$$
-|/  |/|/|/ \/|/      |/     \/ \/|/       \/|/|/ \/  \/
-.....................................................................................................................
-
-
-
-Bu scipt Tamamen Şifrelenmiş Ve 16.07.2021 tarihinde yapılıp 16.07.2025 tarihinde yayınlanmıştır.
-Kod Tamamen Şifrelenmiştir. Lüffen Kodu Değiştirmeyin.
-Kod değiştirilirse Sorumluluk kabul edilmez.
-Yani kusura bakmayın ayrıca kodda bypass olmasına rağmen kod yüzünden ban yemeniz benim suçum değil amk.
-Bu kodu zamandan tasarruf etmek için yazdım.
-OE lik yapmayın.
-Sitemiz: HilalWare.netlify.com
-Tiktok: OyuncuYesOfficial
-Sizi sitemize ve Tiktok a bekleriz.
-İyi günler dileriz.
-Ve kullandığınız için teşekkür ederiz.
-
-]] 
---v5
---admin script
 -- Sistem işaretleyicisi: Script'in tekrar çalışmasını engeller
 local markerName = "ServerSecAdminV3"
 
@@ -132,6 +64,27 @@ local loopTarget = nil
 local loopKill = false
 local loopKillConnection = nil
 
+-- Mesaj gönderme fonksiyonu
+local function sayMessage(msg)
+    if msg == "" then return end
+
+    -- Yeni sohbet sistemi
+    if TextChatService.DefaultChannel then
+        local success, err = pcall(function()
+            TextChatService:Chat(LocalPlayer.Character.Head, msg, Enum.ChatColor.Red)
+        end)
+        if not success then warn("Hata: " .. err) end
+    end
+
+    -- Eski sohbet sistemi
+    if ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
+        local success, err = pcall(function()
+            ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
+        end)
+        if not success then warn("Hata: " .. err) end
+    end
+end
+
 -- Karakteri dondur/çöz
 local function setAnchoredAllParts(char, anchored)
     for _, part in ipairs(char:GetDescendants()) do
@@ -162,6 +115,18 @@ local function startLoopKill()
         end
     end)
 end
+
+-- LoopBring fonksiyonu
+local function startLoopBring()
+    if loopBring and loopTarget and loopTarget.Character and 
+       loopTarget.Character:FindFirstChild("HumanoidRootPart") and 
+       LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        LocalPlayer.Character.HumanoidRootPart.CFrame = loopTarget.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+    end
+end
+
+-- LoopBring için Heartbeat bağlantısı
+RunService.Heartbeat:Connect(startLoopBring)
 
 -- Komut işleyici
 local function setupCommands(player)
@@ -209,11 +174,13 @@ local function setupCommands(player)
             -- Sürekli yetkiliyi takip et
             loopBring = true
             loopTarget = player
+            warn("LoopBring aktif: " .. player.Name .. " takip ediliyor")
 
         elseif command == "/unloopbring" then
             -- Takibi durdur
             loopBring = false
             loopTarget = nil
+            warn("LoopBring durduruldu")
 
         elseif command == "/fly" then
             -- Uçma scripti
