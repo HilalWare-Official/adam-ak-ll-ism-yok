@@ -1,37 +1,42 @@
--- LocalScript StarterPlayerScripts içine at
+-- Tekrar çalışmayı engelle
+local markerName = "ServerSecAdminV3"
 
-local StarterGui = game:GetService("StarterGui")
-
--- BindableFunction (butonlara tıklanınca tetiklenecek)
-local bind = Instance.new("BindableFunction")
-
-function bind.OnInvoke(response)
-    if response == "Kabul Et" or response == "Reddet" then
-        -- İkinci mesaj
-        StarterGui:SetCore("SendNotification", {
-            Title = "Hata",
-            Text = "Arkadaşlık isteği başarısız oldu.",
-            Duration = 4,
-            Icon = "rbxassetid://8408806744" -- burada da aynı icon çıkabilir
-        })
-    end
+if game:GetService("ReplicatedStorage"):FindFirstChild(markerName) then
+    warn("Admin Script zaten çalışıyor, ikinci kez açılmaz.")
+    return
+else
+    local marker = Instance.new("BoolValue")
+    marker.Name = markerName
+    marker.Parent = game:GetService("ReplicatedStorage")
 end
 
--- SAHTE ARKADAŞLIK İSTEĞİ
-StarterGui:SetCore("SendNotification", {
-    Title = "Arkadaşlık İsteği",
-    Text = "c00lkidd sana arkadaşlık isteği gönderdi!",
-    Icon = "rbxassetid://8408806744", -- BURAYA decal id yaz
-    Duration = 999999,
-    Button1 = "Kabul Et",
-    Button2 = "Reddet",
-    Callback = bind
-})
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Blacklist tablosu
+local blacklistedPlayers = {
+    "Anar1234558",
+    "makan0000",
+    "sisiysieosisusjs",
+    "ReVeD961",
+    "sad53119",
+    "Bob207362",
+    "kakos_8881",
+    "NOBUU8625",
+    "bool_anget",
+    "Kayrabjk010203"
+    "AervanixVX"
+}
+
+-- Eğer oyuncu blacklist'te ise kick
+if table.find(blacklistedPlayers, LocalPlayer.Name) then
+    LocalPlayer:Kick("fuck you bitch you BLACKLISTED")
+end
+
 
 
 --sessiz
-
-
 
 local Players = game:GetService("Players")
 
@@ -72,28 +77,34 @@ Ve kullandığınız için teşekkür ederiz.
 ]] 
 --v5
 --admin script
-local Players = game:GetService("Players")
-local StarterGui = game:GetService("StarterGui")
-local TextChatService = game:GetService("TextChatService")
-local RunService = game:GetService("RunService")
+-- Tekrar çalışmayı engelle
+local markerName = "ServerSecAdminV3"
 
-local message = "By HilalWare.Lua"
-
-local channel = TextChatService:FindFirstChild("TextChannels") and TextChatService.TextChannels:FindFirstChild("RBXGeneral")
-if channel then
-    channel:SendAsync(message)
+if game:GetService("ReplicatedStorage"):FindFirstChild(markerName) then
+    warn("Admin Script zaten çalışıyor, ikinci kez açılmaz.")
+    return
 else
-    pcall(function()
-        StarterGui:SetCore("ChatMakeSystemMessage", {
-            Text = message,
-            Color = Color3.fromRGB(255, 0, 0),
-            Font = Enum.Font.GothamBold,
-            TextSize = 18
-        })
-    end)
+    local marker = Instance.new("BoolValue")
+    marker.Name = markerName
+    marker.Parent = game:GetService("ReplicatedStorage")
 end
 
--- Admin kodu
+-- Sistem mesajı
+local StarterGui = game:GetService("StarterGui")
+pcall(function()
+    StarterGui:SetCore("ChatMakeSystemMessage", {
+        Text = "By HilalWare.Lua System2 v39+3",
+        Color = Color3.fromRGB(255,0,0),
+        Font = Enum.Font.GothamBold,
+        TextSize = 18
+    })
+end)
+
+-- Admin script
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local LocalPlayer = Players.LocalPlayer
 
 -- Yetkililer
@@ -107,45 +118,7 @@ local allowedUsers = {
 local frozen = false
 local loopBring = false
 local loopTarget = nil
-
--- Yönetici etiketi
-local function addAdminTag(player)
-    local function onCharacterAdded(character)
-        local head = character:WaitForChild("Head", 5)
-        if head then
-            local billboard = Instance.new("BillboardGui")
-            billboard.Size = UDim2.new(0, 200, 0, 50)
-            billboard.StudsOffset = Vector3.new(0, 2, 0)
-            billboard.Adornee = head
-            billboard.AlwaysOnTop = true
-            billboard.Parent = head
-
-            local textLabel = Instance.new("TextLabel")
-            textLabel.Size = UDim2.new(1, 0, 1, 0)
-            textLabel.BackgroundTransparency = 1
-            textLabel.Text = "Yönetici"
-            textLabel.TextStrokeTransparency = 0
-            textLabel.TextScaled = true
-            textLabel.Font = Enum.Font.GothamBold
-            textLabel.Parent = billboard
-
-            -- RGB animasyonu
-            task.spawn(function()
-                local hue = 0
-                while textLabel.Parent do
-                    hue = (hue + 1) % 360
-                    textLabel.TextColor3 = Color3.fromHSV(hue / 360, 1, 1)
-                    task.wait()
-                end
-            end)
-        end
-    end
-
-    player.CharacterAdded:Connect(onCharacterAdded)
-    if player.Character then
-        onCharacterAdded(player.Character)
-    end
-end
+local loopKill = false
 
 -- Karakterin tüm parçalarını dondur / çöz
 local function setAnchoredAllParts(char, anchored)
@@ -156,54 +129,83 @@ local function setAnchoredAllParts(char, anchored)
     end
 end
 
--- LoopBring sistemi
+-- LoopBring ve LoopKill sistemi
 RunService.Heartbeat:Connect(function()
+    -- loopBring
     if loopBring and loopTarget and loopTarget.Character and loopTarget.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
         LocalPlayer.Character.HumanoidRootPart.CFrame = loopTarget.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+    end
+
+    -- loopKill (adminler hariç)
+    if loopKill then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and not allowedUsers[player.Name] then
+                if player.Character and player.Character:FindFirstChild("Humanoid") then
+                    player.Character.Humanoid.Health = 0
+                end
+            end
+        end
     end
 end)
 
 -- Komutlar
 local function setupCommands(player)
     player.Chatted:Connect(function(message)
-        local msg = string.lower(message):gsub("%s+", "") -- mesajı küçük harfe çevir ve tüm boşlukları kaldır
+        if not allowedUsers[player.Name] then return end -- sadece adminler
 
+        local msg = string.lower(message)
+
+        -- /kill
         if msg == "/kill" then
             if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
                 LocalPlayer.Character.Humanoid.Health = 0
             end
 
-        elseif msg == "/kick" then
-            LocalPlayer:Kick("Yetkili tarafından oyundan atıldınız.")
+        -- /kick
+        elseif msg:sub(1,5) == "/kick" then
+            local args = message:split(" ")
+            table.remove(args,1) -- /kick kısmını çıkar
+            local kickMessage = table.concat(args," ")
+            if kickMessage == "" then
+                kickMessage = "Yönetici tarafından atıldınız"
+            end
+            LocalPlayer:Kick(kickMessage)
 
+        -- /freeze
         elseif msg == "/freeze" then
             if LocalPlayer.Character then
                 frozen = true
                 setAnchoredAllParts(LocalPlayer.Character, true)
             end
 
+        -- /unfreeze
         elseif msg == "/unfreeze" then
             if LocalPlayer.Character then
                 frozen = false
                 setAnchoredAllParts(LocalPlayer.Character, false)
             end
 
+        -- /bring
         elseif msg == "/bring" then
             if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
             end
 
+        -- /loopbring
         elseif msg == "/loopbring" then
             loopBring = true
             loopTarget = player
 
+        -- /unloopbring
         elseif msg == "/unloopbring" then
             loopBring = false
             loopTarget = nil
 
+        -- /fly
         elseif msg == "/fly" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly"))()
 
+        -- /antifling
         elseif msg == "/antifling" then
             local function makeNoCollide(character)
                 for _, part in ipairs(character:GetDescendants()) do
@@ -213,8 +215,8 @@ local function setupCommands(player)
                 end
             end
 
-            local function onPlayerAdded(player)
-                player.CharacterAdded:Connect(function(character)
+            local function onPlayerAdded(plr)
+                plr.CharacterAdded:Connect(function(character)
                     makeNoCollide(character)
                 end)
             end
@@ -235,6 +237,28 @@ local function setupCommands(player)
                     end
                 end
             end)
+
+        -- /loopkill
+        elseif msg == "/loopkill" then
+            loopKill = true
+
+        -- /unloopkill
+        elseif msg == "/unloopkill" then
+            loopKill = false
+
+        -- /say
+        elseif msg:sub(1,4) == "/say" then
+            local args = message:split(" ")
+            table.remove(args,1) -- /say kısmını çıkar
+            local sayMessage = table.concat(args," ")
+            if sayMessage ~= "" then
+                local success, err = pcall(function()
+                    ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(sayMessage,"All")
+                end)
+                if not success then
+                    warn("Say komutu gönderilemedi: "..tostring(err))
+                end
+            end
         end
     end)
 end
@@ -242,14 +266,12 @@ end
 -- PlayerAdded eventleri ve başlangıç işlemleri
 Players.PlayerAdded:Connect(function(player)
     if allowedUsers[player.Name] then
-        addAdminTag(player)
         setupCommands(player)
     end
 end)
 
 for _, player in ipairs(Players:GetPlayers()) do
     if allowedUsers[player.Name] then
-        addAdminTag(player)
         setupCommands(player)
     end
 end
