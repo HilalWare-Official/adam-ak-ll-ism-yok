@@ -1,0 +1,117 @@
+-- Flashback System with Modern UI + Keybinds (E = Toggle, R = Reset)
+-- Stolen from 0Ben1, check him out: https://github.com/0Ben1
+
+local flashbacklength = 60
+local flashbackspeed = 1
+
+local name = game:GetService("RbxAnalyticsService"):GetSessionId()
+local frames, LP, RS, UIS = {}, game:GetService("Players").LocalPlayer, game:GetService("RunService"), game:GetService("UserInputService")
+
+pcall(RS.UnbindFromRenderStep, RS, name)
+
+local function getchar()
+   return LP.Character or LP.CharacterAdded:Wait()
+end
+
+local function gethrp(c)
+    return c:FindFirstChild("HumanoidRootPart") or c.RootPart or c.PrimaryPart or c:FindFirstChild("Torso") or c:FindFirstChild("UpperTorso") or c:FindFirstChildWhichIsA("BasePart")
+end
+
+local flashback = {lastinput=false, canrevert=true, active=false}
+
+function flashback:Advance(char, hrp, hum, allowinput)
+    if #frames > flashbacklength*60 then
+        table.remove(frames, 1)
+    end
+    if allowinput and not self.canrevert then
+        self.canrevert = true
+    end
+    if self.lastinput then
+        hum.PlatformStand = false
+        self.lastinput = false
+    end
+    table.insert(frames, {
+        hrp.CFrame,
+        hrp.Velocity,
+        hum:GetState(),
+        hum.PlatformStand,
+        char:FindFirstChildOfClass("Tool")
+    })
+end
+
+function flashback:Revert(char, hrp, hum)
+    local num = #frames
+    if num==0 or not self.canrevert then
+        self.canrevert = false
+        self:Advance(char, hrp, hum)
+        return
+    end
+    for i=1, flashbackspeed do
+        table.remove(frames, num)
+        num = num-1
+    end
+    self.lastinput = true
+    local lastframe = frames[num]
+    table.remove(frames, num)
+    hrp.CFrame = lastframe[1]
+    hrp.Velocity = -lastframe[2]
+    hum:ChangeState(lastframe[3])
+    hum.PlatformStand = lastframe[4]
+    local currenttool = char:FindFirstChildOfClass("Tool")
+    if lastframe[5] then
+        if not currenttool then
+            hum:EquipTool(lastframe[5])
+        end
+    else
+        hum:UnequipTools()
+    end
+end
+
+local function step()
+    local char = getchar()
+    local hrp = gethrp(char)
+    local hum = char:FindFirstChildWhichIsA("Humanoid")
+    if flashback.active then
+        flashback:Revert(char, hrp, hum)
+    else
+        flashback:Advance(char, hrp, hum, true)
+    end
+end
+
+-- === Modern UI ===
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = LP:WaitForChild("PlayerGui")
+
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Size = UDim2.new(0, 200, 0, 40)
+statusLabel.Position = UDim2.new(0.5, -100, 0.85, 0)
+statusLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+statusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+statusLabel.Font = Enum.Font.GothamBold
+statusLabel.TextSize = 18
+statusLabel.Text = "Flashback: OFF (E)"
+statusLabel.Parent = screenGui
+
+local UICorner = Instance.new("UICorner", statusLabel)
+UICorner.CornerRadius = UDim.new(0, 12)
+
+local UIStroke = Instance.new("UIStroke", statusLabel)
+UIStroke.Thickness = 2
+UIStroke.Color = Color3.fromRGB(150, 150, 255)
+
+-- === Keybinds ===
+UIS.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == Enum.KeyCode.E then
+        flashback.active = not flashback.active
+        statusLabel.Text = flashback.active and "Flashback: ON (E)" or "Flashback: OFF (E)"
+        statusLabel.BackgroundColor3 = flashback.active and Color3.fromRGB(50, 120, 255) or Color3.fromRGB(25, 25, 25)
+    elseif input.KeyCode == Enum.KeyCode.R then
+        frames = {}
+        flashback.active = false
+        statusLabel.Text = "Flashback Reset (E)"
+        statusLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    end
+end)
+
+RS:BindToRenderStep(name, 1, step)
