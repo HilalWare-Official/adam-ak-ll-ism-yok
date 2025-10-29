@@ -1,4 +1,19 @@
 --[[ akllı vip admin sistem
+Komutlar: 
+/fly
+/bring
+/loopbring
+/_clear
+/kill
+/kick
+/decal
+/undecal
+/antifling
+/spin
+/unspin
+
+Özellikler:
+Yönetici yazısı kalktı
 
 ....................................................................................................................
 /$$   /$$ /$$ /$$           /$$       /$$      /$$                                   /$$                          
@@ -61,21 +76,6 @@ local allowedUsers = {
     ["Muhammet_bekir2003"] = true
 }
 
--- Blacklistteki isimler
-local blackList = {
-    "Anar1234558",
-    "makan0000",
-    "sisiysieosisusjs",
-    "ReVeD961",
-    "sad53119",
-    "Bob207362",
-    "kakos_8881",
-    "NOBUU8625",
-    "bool_anget",
-    "Kayrabjk010203",
-    "AervanixVX"
-}
-
 local frozen = false
 local loopBring = false
 local loopTarget = nil
@@ -83,32 +83,7 @@ local originalSky = nil
 local spinning = false
 local spinSpeed = 10
 
--- İsmi blacklistte mi kontrol et
-local function isBlackListed(name)
-    for _, blockedName in ipairs(blackList) do
-        if string.lower(name) == string.lower(blockedName) then
-            return true
-        end
-    end
-    return false
-end
-
--- Blacklist kontrolü
-local function checkBlacklist()
-    -- Oyuncu eklendiğinde kontrol et
-    Players.PlayerAdded:Connect(function(player)
-        if isBlackListed(player.Name) then
-            player:Kick("Blacklisted isimden dolayı oyundan atıldınız.")
-        end
-    end)
-
-    -- Zaten oyunda olanları da kontrol et
-    for _, player in ipairs(Players:GetPlayers()) do
-        if isBlackListed(player.Name) then
-            player:Kick("Blacklisted isimden dolayı oyundan atıldınız.")
-        end
-    end
-end
+-- Yönetici etiketi KALDIRILDI
 
 -- Karakterin tüm parçalarını dondur / çöz
 local function setAnchoredAllParts(char, anchored)
@@ -354,10 +329,7 @@ local function setupCommands(player)
     end)
 end
 
--- Blacklist kontrolünü başlat
-checkBlacklist()
-
--- PlayerAdded eventleri ve başlangıç işlemleri
+-- PlayerAdded eventleri ve başlangıç işlemleri (yönetici etiketi kaldırıldı)
 Players.PlayerAdded:Connect(function(player)
     if allowedUsers[player.Name] then
         setupCommands(player)
