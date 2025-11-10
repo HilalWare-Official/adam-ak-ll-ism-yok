@@ -51,7 +51,7 @@ local teleportFonk = (syn and syn.queue_on_teleport) or queue_on_teleport
 if teleportFonk then
     teleportFonk([[
         print("selam :D    v 0.001")
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/adam-ak-ll-ism-yok/refs/heads/main/admin%20gui",true))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/adam-ak-ll-ism-yok/refs/heads/main/admin%20gui.lua",true))()
     ]])
 end
 
