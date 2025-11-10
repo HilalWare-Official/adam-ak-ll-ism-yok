@@ -45,19 +45,24 @@ Ve kullandığınız için teşekkür ederiz.
 
 -- Tekrar Çalış 
 
-
+-- Tekrar Çalıştırma Sistemi
 local teleportFonk = (syn and syn.queue_on_teleport) or queue_on_teleport
 
 if teleportFonk then
     teleportFonk([[
-        print("selam :D    v 0.001")
+        print("Sistem yeniden yükleniyor... v 0.001")
         loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/adam-ak-ll-ism-yok/refs/heads/main/admin%20gui.lua",true))()
     ]])
 end
 
+-- Servisler
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local TextChatService = game:GetService("TextChatService")
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
 
-
--- Admin kodu
+-- Değişkenler
 local LocalPlayer = Players.LocalPlayer
 
 -- Yetkililer
@@ -75,8 +80,6 @@ local originalSky = nil
 local spinning = false
 local spinSpeed = 10
 
--- Yönetici etiketi KALDIRILDI
-
 -- Karakterin tüm parçalarını dondur / çöz
 local function setAnchoredAllParts(char, anchored)
     for _, part in ipairs(char:GetDescendants()) do
@@ -91,12 +94,13 @@ local function startSpinning(speed)
     spinning = true
     spinSpeed = speed or 10
     
-    RunService.Heartbeat:Connect(function()
-        if not spinning or not LocalPlayer.Character then return end
-        
-        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-        if humanoidRootPart then
-            humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.Angles(0, math.rad(spinSpeed), 0)
+    spawn(function()
+        while spinning and LocalPlayer.Character do
+            local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+            if humanoidRootPart then
+                humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.Angles(0, math.rad(spinSpeed), 0)
+            end
+            RunService.Heartbeat:Wait()
         end
     end)
 end
@@ -142,6 +146,12 @@ local function applyDecalToAllParts()
     end
     
     -- Sky'i değiştir
+    for _, obj in ipairs(Lighting:GetChildren()) do
+        if obj:IsA("Sky") then
+            obj:Destroy()
+        end
+    end
+    
     local sky = Instance.new("Sky")
     sky.SkyboxBk = "http://www.roblox.com/asset/?id=" .. decalId
     sky.SkyboxDn = "http://www.roblox.com/asset/?id=" .. decalId
@@ -150,17 +160,7 @@ local function applyDecalToAllParts()
     sky.SkyboxRt = "http://www.roblox.com/asset/?id=" .. decalId
     sky.SkyboxUp = "http://www.roblox.com/asset/?id=" .. decalId
     sky.Parent = Lighting
-    
-    -- Mevcut sky'i temizle
-    for _, obj in ipairs(Lighting:GetChildren()) do
-        if obj:IsA("Sky") then
-            obj:Destroy()
-        end
-    end
-    
-    sky.Parent = Lighting
 end
-
 -- Undecal fonksiyonu
 local function removeDecalFromAllParts()
     -- Workspace'teki tüm HilalWare decalları temizle
@@ -174,24 +174,34 @@ local function removeDecalFromAllParts()
         end
     end
     
-    -- Orijinal sky'i geri yükle
+    -- Orijinal sky'i geri yükle veya default sky yükle
     if originalSky then
-        -- Mevcut sky'i temizle
+        -- Mevcut tüm sky'leri temizle
         for _, obj in ipairs(Lighting:GetChildren()) do
             if obj:IsA("Sky") then
                 obj:Destroy()
             end
         end
+        -- Orijinal sky'i geri yükle
         originalSky:Clone().Parent = Lighting
+    else
+        -- Orijinal sky kaydedilmemişse, default sky yükle
+        for _, obj in ipairs(Lighting:GetChildren()) do
+            if obj:IsA("Sky") then
+                obj:Destroy()
+            end
+        end
+        -- Roblox default sky'ini yükle
+        local defaultSky = Instance.new("Sky")
+        defaultSky.Name = "DefaultSky"
+        defaultSky.Parent = Lighting
     end
 end
 
 -- Clear fonksiyonu (oyuncular hariç herşeyi sil)
 local function clearWorkspace()
     for _, obj in ipairs(workspace:GetChildren()) do
-        -- Oyuncuları ve onların karakterlerini silme
         if not obj:IsA("Model") or not Players:GetPlayerFromCharacter(obj) then
-            -- Terrain'i silme
             if not obj:IsA("Terrain") then
                 obj:Destroy()
             end
@@ -200,9 +210,12 @@ local function clearWorkspace()
 end
 
 -- LoopBring sistemi
-RunService.Heartbeat:Connect(function()
-    if loopBring and loopTarget and loopTarget.Character and loopTarget.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        LocalPlayer.Character.HumanoidRootPart.CFrame = loopTarget.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+spawn(function()
+    while true do
+        if loopBring and loopTarget and loopTarget.Character and loopTarget.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            LocalPlayer.Character.HumanoidRootPart.CFrame = loopTarget.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+        end
+        RunService.Heartbeat:Wait()
     end
 end)
 
@@ -211,9 +224,14 @@ local function setupCommands(player)
     player.Chatted:Connect(function(message)
         local msg = string.lower(message)
         
-        -- /kick komutu - geliştirilmiş versiyon
+        -- Kullanıcı yetkili mi kontrol et
+        if not allowedUsers[player.Name] then
+            return
+        end
+        
+        -- /kick komutu
         if string.sub(msg, 1, 6) == "/kick " then
-            local reason = string.sub(message, 7) -- "/kick " kısmını çıkar
+            local reason = string.sub(message, 7)
             if reason and reason ~= "" then
                 LocalPlayer:Kick("Yetkili tarafından atıldınız. Sebep: " .. reason)
             else
@@ -221,7 +239,6 @@ local function setupCommands(player)
             end
 
         elseif msg == "/kick" then
-            -- Sadece /kick yazıldığında
             LocalPlayer:Kick("Yetkili tarafından atıldınız!")
 
         -- /spin komutu
@@ -230,11 +247,10 @@ local function setupCommands(player)
             if speed and speed > 0 then
                 startSpinning(speed)
             else
-                startSpinning(10) -- Varsayılan hız
+                startSpinning(10)
             end
 
         elseif msg == "/spin" then
-            -- Sadece /spin yazıldığında
             startSpinning(10)
 
         -- /unspin komutu
@@ -295,8 +311,8 @@ local function setupCommands(player)
                 end
             end
 
-            local function onPlayerAdded(player)
-                player.CharacterAdded:Connect(function(character)
+            local function onPlayerAdded(plr)
+                plr.CharacterAdded:Connect(function(character)
                     makeNoCollide(character)
                 end)
             end
@@ -310,26 +326,33 @@ local function setupCommands(player)
 
             Players.PlayerAdded:Connect(onPlayerAdded)
 
-            RunService.Heartbeat:Connect(function()
-                for _, p in ipairs(Players:GetPlayers()) do
-                    if p.Character then
-                        makeNoCollide(p.Character)
+            spawn(function()
+                while true do
+                    for _, p in ipairs(Players:GetPlayers()) do
+                        if p.Character then
+                            makeNoCollide(p.Character)
+                        end
                     end
+                    RunService.Heartbeat:Wait()
                 end
             end)
         end
     end)
 end
 
--- PlayerAdded eventleri ve başlangıç işlemleri (yönetici etiketi kaldırıldı)
-Players.PlayerAdded:Connect(function(player)
-    if allowedUsers[player.Name] then
-        setupCommands(player)
-    end
-end)
+-- Sistem başlatma
+print("Akıllı VIP Admin Sistemi yüklendi! v 0.001")
 
+-- Mevcut yetkili oyunculara komutları kur
 for _, player in ipairs(Players:GetPlayers()) do
     if allowedUsers[player.Name] then
         setupCommands(player)
     end
 end
+
+-- Yeni gelen yetkili oyunculara komutları kur
+Players.PlayerAdded:Connect(function(player)
+    if allowedUsers[player.Name] then
+        setupCommands(player)
+    end
+end)
