@@ -11,6 +11,7 @@ Komutlar:
 /antifling
 /spin
 /unspin
+/ban
 
 Özellikler:
 Yönetici yazısı kalktı
