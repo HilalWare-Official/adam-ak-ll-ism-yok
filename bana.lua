@@ -4,3 +4,7 @@ if teleportFonk then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/adam-ak-ll-ism-yok/refs/heads/main/bana.lua",true))()
     ]])
 end
+
+
+local player = game.Players.LocalPlayer
+player:Kick("Banned!")
