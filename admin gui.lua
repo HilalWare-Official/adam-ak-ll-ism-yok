@@ -11,7 +11,6 @@ Komutlar:
 /antifling
 /spin
 /unspin
-/ban
 
 Özellikler:
 Yönetici yazısı kalktı
@@ -262,10 +261,6 @@ local function setupCommands(player)
         elseif msg == "/decal" then
             applyDecalToAllParts()
                 
-        --ban kodu 
-        elseif msg == "/ban" then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/adam-ak-ll-ism-yok/refs/heads/main/bana.lua",true))()
-
         -- /undecal komutu
         elseif msg == "/undecal" then
             removeDecalFromAllParts()
