@@ -69,6 +69,7 @@ local LocalPlayer = Players.LocalPlayer
 -- Yetkililer
 local allowedUsers = {
     ["q692q"] = true,
+    ["q2_0a"] = true,
     ["muhammet_bekir2004"] = true,
     ["HilalWare_Lua"] = true,
     ["Muhammet_bekir2003"] = true
