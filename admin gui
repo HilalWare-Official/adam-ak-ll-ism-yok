@@ -95,6 +95,7 @@ local allowedUsers = {
     ["q2_0a"] = true,
     ["muhammet_bekir2004"] = true,
     ["HilalWare_Lua"] = true,
+    ["ultramegac00ladmin"] = true,
     ["Muhammet_bekir2003"] = true
 }
 
