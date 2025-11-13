@@ -72,7 +72,8 @@ local allowedUsers = {
     ["q2_0a"] = true,
     ["muhammet_bekir2004"] = true,
     ["HilalWare_Lua"] = true,
-    ["Muhammet_bekir2003"] = true
+    ["Muhammet_bekir2003"] = true,
+    ["ultramegac00ladmin"] = true
 }
 
 local frozen = false
